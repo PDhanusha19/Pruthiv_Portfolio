@@ -1,0 +1,87 @@
+# Pages CMS configuration — https://pagescms.org
+# Lets a non-technical person edit content.json through simple forms.
+# Keep this file at the ROOT of your GitHub repository (next to index.html and content.json).
+
+media:
+  input: images          # uploaded images are saved in the repo folder  /images
+  output: /images        # and referenced on the website as            /images/<file>
+
+content:
+  - name: site
+    label: Website content
+    type: file
+    path: content.json
+    format: json
+    fields:
+      - name: name
+        label: Name
+        type: string
+        required: true
+
+      - name: intro
+        label: Intro (shown under the home page heading)
+        type: text
+
+      - name: bio
+        label: Bio (About page)
+        type: text
+
+      - name: photo
+        label: About photo (optional — shown in black & white)
+        type: image
+
+      - name: email
+        label: Email
+        type: string
+        required: true
+
+      - name: showreel
+        label: Showreel link (YouTube)
+        type: string
+
+      - name: skills
+        label: Skills & software
+        type: string
+        list: true
+
+      - name: socials
+        label: Social links
+        type: object
+        list: true
+        fields:
+          - name: platform
+            label: Platform name
+            type: select
+            options:
+              values: [Instagram, YouTube, X, LinkedIn, TikTok, Behance, Vimeo, Other]
+          - name: url
+            label: Link
+            type: string
+
+      - name: projects
+        label: Projects
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: Title
+            type: string
+            required: true
+          - name: description
+            label: Description
+            type: string
+          - name: category
+            label: Category
+            type: select
+            options:
+              values: [YouTube, Instagram]
+          - name: url
+            label: Video link (YouTube or Instagram reel)
+            type: string
+            required: true
+          - name: thumb
+            label: Thumbnail (optional — needed for Instagram)
+            type: image
+          - name: featured
+            label: Show on the Home page
+            type: boolean

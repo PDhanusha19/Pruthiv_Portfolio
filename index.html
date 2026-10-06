@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portfolio</title>
+<meta name="description" content="Video editor portfolio.">
+<!-- FONT: Libre Franklin (Google Fonts). For Balto, add your Adobe Fonts kit link here; site.css (--font) already lists it. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body data-page="index.html" data-title="">
+<main>
+<div id="status" class="status" role="status"></div>
+<div id="content" hidden>
+<!-- All text comes from content.json -->
+<section class="hero">
+  <h1>Hello, I'm <span data-bind="name"></span></h1>
+  <p class="lead" data-bind="intro"></p>
+</section>
+<section class="band" id="reelBand"><div class="wrap"><div class="reel"><div class="frame" id="reelFrame"></div></div></div></section>
+<section class="section">
+  <div class="wrap">
+    <div class="head"><h2>Featured Projects</h2></div>
+    <div class="grid" id="grid" data-featured></div>
+    <div class="more"><a class="btn" href="projects.html">View all projects →</a></div>
+  </div>
+</section>
+</div>
+</main>
+<script src="site.js"></script>
+</body>
+</html>

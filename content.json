@@ -1,0 +1,28 @@
+{
+  "name": "Pruthiv",
+  "intro": "A video editor specialising in YouTube content, short-form reels, and cinematic storytelling.",
+  "bio": "I'm a video editor who turns raw footage into stories people finish watching. From fast-paced YouTube edits to punchy reels and cinematic pieces, I focus on rhythm, sound and clean color. Let's make something worth sharing.",
+  "photo": "",
+  "email": "hello@example.com",
+  "showreel": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+  "skills": [
+    "Premiere Pro",
+    "After Effects",
+    "DaVinci Resolve",
+    "Color Grading",
+    "Motion Graphics"
+  ],
+  "socials": [
+    { "platform": "Instagram", "url": "https://instagram.com/yourhandle" },
+    { "platform": "YouTube", "url": "https://youtube.com/@yourchannel" },
+    { "platform": "X", "url": "https://x.com/yourhandle" }
+  ],
+  "projects": [
+    { "title": "Project Title One", "description": "A short one-line description.", "category": "YouTube", "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ", "thumb": "", "featured": true },
+    { "title": "Project Title Two", "description": "A short one-line description.", "category": "YouTube", "url": "https://youtu.be/eRsGyueVLvQ", "thumb": "", "featured": true },
+    { "title": "Reel Title Three", "description": "A short one-line description.", "category": "Instagram", "url": "https://www.instagram.com/reel/REEL_ID_1/", "thumb": "", "featured": true },
+    { "title": "Project Title Four", "description": "A short one-line description.", "category": "YouTube", "url": "https://www.youtube.com/watch?v=R6MlUcmOul8", "thumb": "", "featured": false },
+    { "title": "Reel Title Five", "description": "A short one-line description.", "category": "Instagram", "url": "https://www.instagram.com/reel/REEL_ID_2/", "thumb": "", "featured": false },
+    { "title": "Project Title Six", "description": "A short one-line description.", "category": "YouTube", "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ", "thumb": "", "featured": false }
+  ]
+}

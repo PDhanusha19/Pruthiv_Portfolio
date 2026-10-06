@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portfolio</title>
+<meta name="description" content="Video editor portfolio.">
+<!-- FONT: Libre Franklin (Google Fonts). For Balto, add your Adobe Fonts kit link here; site.css (--font) already lists it. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body data-page="contact.html" data-title="Contact">
+<main>
+<div id="status" class="status" role="status"></div>
+<div id="content" hidden>
+<section class="wrap split">
+  <div>
+    <h2>Let's work together</h2>
+    <p>Have a project in mind? Send a message and let's talk.</p>
+    <a class="btn mail" data-mail href="#"></a>
+    <div class="socials" data-socials></div>
+  </div>
+  <form id="form">
+    <input name="name" placeholder="Your name" required>
+    <input name="email" type="email" placeholder="Your email" required>
+    <textarea name="message" placeholder="Tell me about your project" required></textarea>
+    <button class="btn" type="submit">Send message</button>
+  </form>
+</section>
+</div>
+</main>
+<script src="site.js"></script>
+</body>
+</html>
