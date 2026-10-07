@@ -5,13 +5,28 @@
 :root{
   --white:#FFFFFF; --soft:#F4F4F4; --black:#0A0A0A; --grey:#6B6B6B; --line:#D4D4D4;
   --font:"Libre Franklin", Balto, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+
+  /* ---- DESIGN SETTINGS ----------------------------------------------------
+     These are the ORIGINAL values. site.js overrides them from content.json → "design"
+     (edited in Pages CMS → Design Settings). If a setting is missing, these are used. */
+  --heading-font:Balto,"Libre Franklin",sans-serif;
+  --body-font:Balto,"Libre Franklin",sans-serif;
+  --heading-weight:800; --h3-weight:700; --heading-tracking:-.03em;
+  --heading-color:#0A0A0A; --text-color:#0A0A0A;            /* --grey (below) is the secondary text color */
+  --hero-min:2.2rem;  --hero-vw:7vw;   --hero-max:5rem;
+  --sec-min:1.8rem;   --sec-vw:4vw;    --sec-max:3rem;
+  --sub-min:1.4rem;   --sub-vw:3vw;    --sub-max:2rem;
+  --body-scale:1;
+  --hero-align:center; --hero-items:center; --hero-align-m:center; --hero-items-m:center;
+  --about-align:left;  --about-tags:flex-start; --about-align-m:left; --about-tags-m:flex-start;
+  --style-align:left;  --style-ml:0; --style-mr:auto;
   --ease:cubic-bezier(.76,0,.24,1);
   --pad:clamp(20px,5vw,72px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 html.lock{overflow:hidden}
-body{font-family:var(--font);font-weight:300;background:var(--white);color:var(--black);line-height:1.6;
+body{font-family:var(--body-font);font-size:calc(1rem * var(--body-scale));font-weight:300;background:var(--white);color:var(--text-color);line-height:1.6;
   -webkit-font-smoothing:antialiased;min-height:100svh;display:flex;flex-direction:column;
   animation:pageIn .5s ease-out}
 body.leaving{opacity:0;transition:opacity .25s ease}
@@ -21,11 +36,11 @@ img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;color:inherit}
 :focus-visible{outline:2px solid var(--black);outline-offset:3px}
-h1,h2,h3{letter-spacing:-.03em}
-h1,h2{text-transform:uppercase;font-weight:800;line-height:1}
-h2{font-size:clamp(1.8rem,4vw,3rem)}
+h1,h2,h3{font-family:var(--heading-font);letter-spacing:var(--heading-tracking);color:var(--heading-color)}
+h1,h2{text-transform:uppercase;font-weight:var(--heading-weight);line-height:1}
+h2{font-size:clamp(var(--sec-min),var(--sec-vw),var(--sec-max))}
 .wrap{max-width:1344px;margin:0 auto;padding-inline:var(--pad)}
-.lead{color:var(--grey);font-size:clamp(1rem,1.8vw,1.2rem)}
+.lead{color:var(--grey);font-size:calc(clamp(1rem,1.8vw,1.2rem) * var(--body-scale))}
 
 .btn{display:inline-block;background:var(--black);color:var(--white);border:1px solid var(--black);padding:13px 26px;
   font-weight:500;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;transition:background .25s,color .25s}
@@ -42,7 +57,7 @@ h2{font-size:clamp(1.8rem,4vw,3rem)}
 @keyframes navIn{from{opacity:0;transform:translateY(-100%)}to{opacity:1;transform:none}}
 @keyframes itemIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .nav-item{animation:itemIn .5s ease-out backwards;animation-delay:calc(.6s + var(--i)*.08s)}
-.logo{display:inline-block;font-weight:800;font-size:1.25rem;text-transform:uppercase;letter-spacing:-.03em;transform-origin:left center;transition:transform .3s}
+.logo{display:inline-block;font-family:var(--heading-font);font-weight:var(--heading-weight);font-size:1.25rem;text-transform:uppercase;letter-spacing:var(--heading-tracking);transform-origin:left center;transition:transform .3s}
 #nav.scrolled .logo{transform:scale(.82)}
 .menu{display:flex;gap:40px;list-style:none}
 .menu a{position:relative;display:inline-block;font-size:.82rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);padding:4px 0;transition:color .3s}
@@ -58,15 +73,16 @@ h2{font-size:clamp(1.8rem,4vw,3rem)}
 #overlay{position:fixed;inset:0;z-index:40;background:var(--white);display:flex;flex-direction:column;justify-content:center;padding:0 var(--pad);
   transform:translateY(-100%);visibility:hidden;transition:transform .5s var(--ease),visibility 0s .5s}
 #overlay.open{transform:none;visibility:visible;transition:transform .5s var(--ease)}
-#overlay a{display:block;font-size:clamp(1.6rem,8vw,2.6rem);font-weight:800;text-transform:uppercase;letter-spacing:-.03em;line-height:1.3;
+#overlay a{display:block;font-family:var(--heading-font);font-size:clamp(1.6rem,8vw,2.6rem);font-weight:var(--heading-weight);text-transform:uppercase;letter-spacing:var(--heading-tracking);line-height:1.3;
   opacity:0;transform:translateY(40px);transition:transform .3s,opacity .3s}
 #overlay.open a{opacity:1;transform:none;transition:transform .6s var(--ease),opacity .5s;transition-delay:calc(.25s + var(--i)*.08s)}
 @media(max-width:800px){.menu{display:none}.burger{display:block}}
 
 /* ---------- Home ---------- */
-.hero{text-align:center;padding:clamp(28px,6vh,64px) var(--pad) clamp(24px,4vh,40px)}
-.hero h1{font-size:clamp(2.2rem,7vw,5rem);margin-bottom:1rem}
-.hero p{max-width:40em;margin:0 auto}
+.hero{padding:clamp(28px,6vh,64px) 0 clamp(24px,4vh,40px)}
+.hero .wrap{display:flex;flex-direction:column;align-items:var(--hero-items);text-align:var(--hero-align)}
+.hero h1{font-size:clamp(var(--hero-min),var(--hero-vw),var(--hero-max));margin-bottom:1rem}
+.hero p{max-width:40em;margin:0}
 .band{background:var(--soft);padding:clamp(28px,5vh,64px) 0}
 .reel{max-width:1200px;margin:0 auto}
 @media(max-width:620px){.band .wrap{padding-inline:12px}}
@@ -104,17 +120,17 @@ h2{font-size:clamp(1.8rem,4vw,3rem)}
 .card:hover .thumb::after{opacity:1}
 .card:hover .thumb svg,.card:focus-visible .thumb svg{opacity:1;transform:translate(-50%,-50%)}
 .card .meta{padding:16px}
-.card h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
-.card p{font-size:.88rem;color:var(--grey)}
+.card h3{font-size:1.1rem;font-weight:var(--h3-weight);margin-bottom:4px}
+.card p{font-size:calc(.88rem * var(--body-scale));color:var(--grey)}
 
 /* ---------- About / Contact (fit one screen on desktop) ---------- */
 .split{display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(28px,6vw,88px);align-items:center;padding-block:clamp(24px,5vh,56px)}
 @media(max-width:820px){.split{grid-template-columns:1fr}}
 .photo{width:100%;max-height:68vh;aspect-ratio:4/5;object-fit:cover;filter:grayscale(100%);border-radius:8px;background:var(--line)}
 @media(max-width:820px){.photo{max-height:none;aspect-ratio:4/3}}
-.split p{color:var(--grey);font-size:1.05rem;margin:1.2rem 0 1.6rem}
+.split p{color:var(--grey);font-size:calc(1.05rem * var(--body-scale));margin:1.2rem 0 1.6rem}
 .tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none}
-.tags li{border:1px solid var(--line);color:var(--grey);padding:7px 14px;font-size:.82rem}
+.tags li{border:1px solid var(--line);color:var(--grey);padding:7px 14px;font-size:calc(.82rem * var(--body-scale))}
 .mail{margin:1.4rem 0 1.8rem}
 .socials{display:flex;gap:10px}
 .socials a{width:46px;height:46px;display:grid;place-items:center;transition:transform .25s,opacity .25s}
@@ -164,11 +180,11 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
 [data-bind="bio"]{white-space:pre-line}
 
 /* ---------- Style detail pages ---------- */
-.style-title{font-size:clamp(2.4rem,7vw,5rem);margin-bottom:1.2rem}
-.style-desc{max-width:44em;white-space:pre-line;color:var(--grey);font-size:clamp(1rem,1.6vw,1.15rem)}
+.style-title{font-size:clamp(calc(var(--hero-min) + .2rem),var(--hero-vw),var(--hero-max));margin-bottom:1.2rem}
+.style-desc{max-width:44em;white-space:pre-line;color:var(--grey);font-size:calc(clamp(1rem,1.6vw,1.15rem) * var(--body-scale))}
 .feature{margin-top:clamp(28px,5vh,48px)}
 .feature .frame{box-shadow:0 30px 70px -20px rgba(0,0,0,.4)}
-.sub{font-size:clamp(1.4rem,3vw,2rem);margin-bottom:24px}
+.sub{font-size:clamp(var(--sub-min),var(--sub-vw),var(--sub-max));margin-bottom:24px}
 .frames{background:var(--soft);padding:clamp(40px,7vh,72px) 0;margin-top:clamp(24px,5vh,56px)}
 .frames-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media(max-width:620px){.frames-grid{grid-template-columns:1fr}}
@@ -199,7 +215,6 @@ h1,h2,h3,p,li,a,span{overflow-wrap:anywhere}
   .head{flex-direction:column;align-items:flex-start}
   .head.center{align-items:center}
   .filters .f{padding:8px 16px}
-  .hero{padding-inline:20px}
   .split{padding-block:28px}
   .playbtn i{width:64px;height:64px}
   #modal{padding:12px}
@@ -212,3 +227,20 @@ h1,h2,h3,p,li,a,span{overflow-wrap:anywhere}
 
 /* Footer icons: icon art (not its 40px tap area) sits flush with the right edge of the container */
 @media(min-width:621px){#footLinks{margin-right:-8px}}
+
+/* ---------- Design settings: alignment (values come from content.json → design.alignment) ---------- */
+.about-col{text-align:var(--about-align)}
+.about-col .tags{justify-content:var(--about-tags)}
+.style-title,.style-desc{text-align:var(--style-align)}
+.style-desc{margin-left:var(--style-ml);margin-right:var(--style-mr)}
+html.sec-custom h2{text-align:var(--sec-align)}
+html.sec-custom .head{flex-direction:column;align-items:var(--sec-items)}
+html.sec-custom .filters{justify-content:var(--sec-items)}
+@media(max-width:620px){
+  .hero .wrap{align-items:var(--hero-items-m);text-align:var(--hero-align-m)}
+  .about-col{text-align:var(--about-align-m)}
+  .about-col .tags{justify-content:var(--about-tags-m)}
+  html.sec-custom h2{text-align:var(--sec-align-m)}
+  html.sec-custom .head{align-items:var(--sec-items-m)}
+  html.sec-custom .filters{justify-content:var(--sec-items-m)}
+}

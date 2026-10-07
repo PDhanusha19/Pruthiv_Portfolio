@@ -7,6 +7,154 @@ media:
   output: /images        # and referenced on the website as            /images/<file>
 
 content:
+  # ---------------------------------------------------------------------------
+  # DESIGN SETTINGS — change the look of the whole website without touching code.
+  # RESET TO ORIGINAL: set every dropdown back to the value marked "Original" below
+  # (or clear a field / delete the value) and the site falls back to its original design.
+  # ---------------------------------------------------------------------------
+  - name: design
+    label: Design Settings
+    type: file
+    path: content.json
+    format: json
+    fields:
+      - name: design
+        label: Design Settings
+        type: object
+        description: "Changes the look of every page. ORIGINAL values: fonts Balto, sizes Medium, heading/text color Black #0A0A0A, grey text #6B6B6B, hero Center, section headings Original (as designed), About Left, Style pages Left. To reset, pick these again or clear the field."
+        fields:
+          - name: fonts
+            label: Fonts
+            type: object
+            fields:
+              - name: heading
+                label: Heading font
+                type: select
+                description: "The font for big titles like HELLO, I'M DIVNFX and the menu. (Original: Balto)"
+                default: Balto
+                options:
+                  values: [Balto, Libre Franklin, Inter, Archivo, Bebas Neue, Space Grotesk]
+              - name: body
+                label: Body text font
+                type: select
+                description: "The font for paragraphs, descriptions and buttons. (Original: Balto)"
+                default: Balto
+                options:
+                  values: [Balto, Libre Franklin, Inter, Archivo, Bebas Neue, Space Grotesk]
+          - name: sizes
+            label: Font Sizes
+            type: object
+            fields:
+              - name: hero
+                label: Hero heading size
+                type: select
+                description: "Changes the big HELLO heading on the home page (and the title on style pages). (Original: Medium)"
+                default: Medium
+                options:
+                  values: [Small, Medium, Large, Extra Large]
+              - name: section
+                label: Section heading size
+                type: select
+                description: "Changes headings like FEATURED PROJECTS, ABOUT ME and SELECTED FRAMES. (Original: Medium)"
+                default: Medium
+                options:
+                  values: [Small, Medium, Large]
+              - name: body
+                label: Body text size
+                type: select
+                description: "Changes paragraphs, descriptions and card text. (Original: Medium)"
+                default: Medium
+                options:
+                  values: [Small, Medium, Large]
+          - name: colors
+            label: Colors
+            type: object
+            fields:
+              - name: heading
+                label: Heading color
+                type: select
+                description: "Color of all titles. Pick a ready-made color. (Original: #0A0A0A)"
+                default: "#0A0A0A"
+                options:
+                  values:
+                    - { value: "#0A0A0A", label: "Black (#0A0A0A)" }
+                    - { value: "#333333", label: "Charcoal (#333333)" }
+                    - { value: "#555555", label: "Dark Grey (#555555)" }
+                    - { value: "#6B6B6B", label: "Grey (#6B6B6B)" }
+                    - { value: "#9A9A9A", label: "Light Grey (#9A9A9A)" }
+                    - { value: "#FFFFFF", label: "White (#FFFFFF) - invisible on the white page, ignored" }
+              - name: headingCustom
+                label: Heading color - custom color (optional)
+                type: string
+                description: "Optional. Type your own color like #1A1A1A. When filled in, it replaces the swatch above. Leave empty to use the swatch."
+              - name: text
+                label: Body text color
+                type: select
+                description: "Color of normal text. Pick a ready-made color. (Original: #0A0A0A)"
+                default: "#0A0A0A"
+                options:
+                  values:
+                    - { value: "#0A0A0A", label: "Black (#0A0A0A)" }
+                    - { value: "#333333", label: "Charcoal (#333333)" }
+                    - { value: "#555555", label: "Dark Grey (#555555)" }
+                    - { value: "#6B6B6B", label: "Grey (#6B6B6B)" }
+                    - { value: "#9A9A9A", label: "Light Grey (#9A9A9A)" }
+                    - { value: "#FFFFFF", label: "White (#FFFFFF) - invisible on the white page, ignored" }
+              - name: textCustom
+                label: Body text color - custom color (optional)
+                type: string
+                description: "Optional. Type your own color like #1A1A1A. When filled in, it replaces the swatch above. Leave empty to use the swatch."
+              - name: muted
+                label: Secondary (grey) text color
+                type: select
+                description: "Color of descriptions, menu links and small details. Pick a ready-made color. (Original: #6B6B6B)"
+                default: "#6B6B6B"
+                options:
+                  values:
+                    - { value: "#0A0A0A", label: "Black (#0A0A0A)" }
+                    - { value: "#333333", label: "Charcoal (#333333)" }
+                    - { value: "#555555", label: "Dark Grey (#555555)" }
+                    - { value: "#6B6B6B", label: "Grey (#6B6B6B)" }
+                    - { value: "#9A9A9A", label: "Light Grey (#9A9A9A)" }
+                    - { value: "#FFFFFF", label: "White (#FFFFFF) - invisible on the white page, ignored" }
+              - name: mutedCustom
+                label: Secondary (grey) text color - custom color (optional)
+                type: string
+                description: "Optional. Type your own color like #1A1A1A. When filled in, it replaces the swatch above. Leave empty to use the swatch."
+          - name: alignment
+            label: Alignment
+            type: object
+            description: "On phones, Center stays centered and everything else becomes left-aligned so text stays easy to read."
+            fields:
+              - name: hero
+                label: Hero text alignment
+                type: select
+                description: "Aligns the HELLO heading and intro on the home page. (Original: Center)"
+                default: Center
+                options:
+                  values: [Left, Center, Right]
+              - name: sections
+                label: Section headings alignment
+                type: select
+                description: "Aligns headings like FEATURED PROJECTS and ABOUT ME on every page. 'Original' keeps the designed layout (Featured Projects centered, others left). (Original: Original (as designed))"
+                default: "Original (as designed)"
+                options:
+                  values: ["Original (as designed)", Left, Center, Right]
+              - name: about
+                label: About section text alignment
+                type: select
+                description: "Aligns the text on the About page. (Original: Left)"
+                default: Left
+                options:
+                  values: [Left, Center, Justify]
+              - name: styles
+                label: Style pages alignment (title + description)
+                type: select
+                description: "Aligns the title and description on Talking Head, Motion Graphic and SaaS UI pages. (Original: Left)"
+                default: Left
+                options:
+                  values: [Left, Center]
+
   - name: site
     label: Website content
     type: file

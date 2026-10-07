@@ -37,6 +37,94 @@ function safeImg(img, src, fallback = PLACEHOLDER){
   img.src = safeUrl(src);
 }
 
+/* ==========================================================
+   DESIGN SETTINGS  (content.json → "design", edited in Pages CMS → Design Settings)
+   Every value is checked against the lists below. Anything missing or invalid
+   falls back to the ORIGINAL design, so the site can never break.
+   ========================================================== */
+const DEFAULTS = {
+  fonts:{ heading:"Balto", body:"Balto" },
+  sizes:{ hero:"Medium", section:"Medium", body:"Medium" },
+  colors:{ heading:"#0A0A0A", text:"#0A0A0A", muted:"#6B6B6B" },
+  alignment:{ hero:"Center", sections:"Original (as designed)", about:"Left", styles:"Left" }
+};
+const FONTS = {                     // stack = CSS font-family · gf = Google Fonts query (loaded automatically)
+  "Balto":          { stack:'Balto, "Libre Franklin", sans-serif', h:800, h3:700, track:"-.03em" },     // Balto = Adobe Fonts kit (add your kit link in the HTML <head>)
+  "Libre Franklin": { stack:'"Libre Franklin", sans-serif',        h:800, h3:700, track:"-.03em" },     // already loaded by every page
+  "Inter":          { stack:'"Inter", "Libre Franklin", sans-serif',          gf:"Inter:wght@300;400;500;700;800",   h:800, h3:700, track:"-.03em" },
+  "Archivo":        { stack:'"Archivo", "Libre Franklin", sans-serif',        gf:"Archivo:wght@300;400;500;700;800", h:800, h3:700, track:"-.03em" },
+  "Bebas Neue":     { stack:'"Bebas Neue", "Libre Franklin", sans-serif',     gf:"Bebas+Neue",                       h:400, h3:400, track:".02em" },   // Bebas only has one weight
+  "Space Grotesk":  { stack:'"Space Grotesk", "Libre Franklin", sans-serif',   gf:"Space+Grotesk:wght@300;400;500;700", h:700, h3:700, track:"-.03em" }
+};
+const SIZES = {                      // [min, preferred (scales with screen width), max] → used in clamp() so mobile stays readable
+  hero:    { "Small":["1.8rem","5.5vw","3.6rem"], "Medium":["2.2rem","7vw","5rem"], "Large":["2.6rem","8.5vw","6.4rem"], "Extra Large":["3rem","10vw","8rem"] },
+  section: { "Small":["1.4rem","3.2vw","2.3rem"], "Medium":["1.8rem","4vw","3rem"], "Large":["2.2rem","5vw","4rem"] },
+  sub:     { "Small":["1.2rem","2.4vw","1.6rem"], "Medium":["1.4rem","3vw","2rem"],  "Large":["1.7rem","3.8vw","2.6rem"] },   // "Selected Frames" style sub-headings follow the section size
+  body:    { "Small":.92, "Medium":1, "Large":1.1 }
+};
+const ALIGN = { "Left":["left","flex-start"], "Center":["center","center"], "Right":["right","flex-end"], "Justify":["justify","flex-start"] };
+const ALLOWED = { hero:["Left","Center","Right"], sections:["Left","Center","Right"], about:["Left","Center","Justify"], styles:["Left","Center"] };
+
+function hexColor(v){
+  const m = String(v == null ? "" : v).trim().match(/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (!m) return null;
+  const h = m[1].length === 3 ? [...m[1]].map(c => c + c).join("") : m[1];
+  return "#" + h.toUpperCase();
+}
+function pickColor(preset, custom, fallback, label){
+  const c = hexColor(custom) || hexColor(preset) || fallback;
+  if (c === "#FFFFFF"){ console.warn(`Design: white ${label} would be invisible on the white page — using the original color.`); return fallback; }
+  return c;
+}
+const choose = (key, table, fallback) => Object.prototype.hasOwnProperty.call(table, key) ? key : fallback;
+
+function applyDesign(raw){
+  const d = raw && typeof raw === "object" ? raw : {};
+  const f = d.fonts || {}, z = d.sizes || {}, c = d.colors || {}, a = d.alignment || {};
+  const root = document.documentElement, st = root.style;
+
+  // Fonts (+ load the Google Fonts that were chosen)
+  const hf = choose(f.heading, FONTS, DEFAULTS.fonts.heading), bf = choose(f.body, FONTS, DEFAULTS.fonts.body);
+  st.setProperty("--heading-font", FONTS[hf].stack); st.setProperty("--body-font", FONTS[bf].stack);
+  st.setProperty("--heading-weight", FONTS[hf].h); st.setProperty("--h3-weight", FONTS[hf].h3); st.setProperty("--heading-tracking", FONTS[hf].track);
+  const families = [...new Set([hf, bf].map(n => FONTS[n].gf).filter(Boolean))];
+  let link = document.getElementById("design-fonts");
+  if (families.length){
+    if (!link){ link = document.createElement("link"); link.id = "design-fonts"; link.rel = "stylesheet"; document.head.append(link); }
+    link.href = "https://fonts.googleapis.com/css2?" + families.map(g => "family=" + g).join("&") + "&display=swap";
+  } else if (link) link.remove();
+
+  // Font sizes
+  const hs = choose(z.hero, SIZES.hero, DEFAULTS.sizes.hero), ss = choose(z.section, SIZES.section, DEFAULTS.sizes.section), bs = choose(z.body, SIZES.body, DEFAULTS.sizes.body);
+  [["hero", SIZES.hero[hs]], ["sec", SIZES.section[ss]], ["sub", SIZES.sub[ss]]].forEach(([k, v]) => {
+    st.setProperty(`--${k}-min`, v[0]); st.setProperty(`--${k}-vw`, v[1]); st.setProperty(`--${k}-max`, v[2]);
+  });
+  st.setProperty("--body-scale", SIZES.body[bs]);
+
+  // Colors (custom hex wins over the preset swatch)
+  st.setProperty("--heading-color", pickColor(c.heading, c.headingCustom, DEFAULTS.colors.heading, "heading color"));
+  st.setProperty("--text-color",    pickColor(c.text,    c.textCustom,    DEFAULTS.colors.text,    "text color"));
+  st.setProperty("--grey",          pickColor(c.muted,   c.mutedCustom,   DEFAULTS.colors.muted,   "secondary text color"));
+
+  // Alignment — on mobile "Center" stays centered, everything else becomes left-aligned
+  const al = (key, def) => choose(a[key], Object.fromEntries(ALLOWED[key].map(k => [k, 1])), def);
+  const set = (name, key, def, itemsToo) => {
+    const k = al(key, def), m = k === "Center" ? "Center" : "Left";
+    if (!ALIGN[k]) return;
+    st.setProperty(`--${name}-align`, ALIGN[k][0]);   st.setProperty(`--${name}-align-m`, ALIGN[m][0]);
+    if (itemsToo){ st.setProperty(`--${name}-${itemsToo}`, ALIGN[k][1]); st.setProperty(`--${name}-${itemsToo}-m`, ALIGN[m][1]); }
+  };
+  set("hero", "hero", "Center", "items");
+  set("about", "about", "Left", "tags");
+  set("sec", "sections", "", "items");
+  root.classList.toggle("sec-custom", ALLOWED.sections.includes(a.sections));
+  const sk = al("styles", "Left");
+  st.setProperty("--style-align", ALIGN[sk][0]);
+  st.setProperty("--style-ml", sk === "Center" ? "auto" : "0"); st.setProperty("--style-mr", "auto");
+}
+/* Re-use the last design instantly so there is no flash of the old look between pages */
+try { const cached = localStorage.getItem("design"); if (cached) applyDesign(JSON.parse(cached)); } catch (e) {}
+
 /* ---------- Shared layout (navbar, menu, footer, modal, lightbox) — built right away ---------- */
 const current = document.body.dataset.page;
 const nav_ = (overlay) => PAGES.map(([href,label],i) => {
@@ -169,6 +257,9 @@ function build(C){
   const slug = document.body.dataset.style;
   const style = slug ? styles.find(s => s.slug === slug) : null;
   if (slug && !style) throw new Error("Style not found in content.json: " + slug);
+
+  applyDesign(C.design);
+  try { localStorage.setItem("design", JSON.stringify(C.design || {})); } catch (e) {}
 
   document.title = (style ? style.title : document.body.dataset.title) ? `${style ? style.title : document.body.dataset.title} — ${C.brand}` : `${C.brand} — Video Editor`;
   $$("[data-bind]").forEach(e => { const v = C[e.dataset.bind]; if (v != null) e.textContent = v; });

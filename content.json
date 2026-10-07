@@ -155,5 +155,30 @@
         }
       ]
     }
-  ]
+  ],
+  "design": {
+    "fonts": {
+      "heading": "Balto",
+      "body": "Balto"
+    },
+    "sizes": {
+      "hero": "Medium",
+      "section": "Medium",
+      "body": "Medium"
+    },
+    "colors": {
+      "heading": "#0A0A0A",
+      "headingCustom": "",
+      "text": "#0A0A0A",
+      "textCustom": "",
+      "muted": "#6B6B6B",
+      "mutedCustom": ""
+    },
+    "alignment": {
+      "hero": "Center",
+      "sections": "Original (as designed)",
+      "about": "Left",
+      "styles": "Left"
+    }
+  }
 }
