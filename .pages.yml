@@ -52,6 +52,14 @@ content:
         label: Instagram link
         type: string
 
+      - name: tiktok
+        label: TikTok profile link
+        type: string
+
+      - name: whatsapp
+        label: WhatsApp number with country code (e.g. +94771234567)
+        type: string
+
       - name: styles
         label: Styles (the three cards on the home page, each with its own page)
         type: object
