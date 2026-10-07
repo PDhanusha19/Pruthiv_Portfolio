@@ -3,27 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Portfolio</title>
-<meta name="description" content="Video editor portfolio.">
+<title>DIVNFX</title>
+<meta name="description" content="DIVNFX — video editor, motion designer and animator.">
 <!-- FONT: Libre Franklin (Google Fonts). For Balto, add your Adobe Fonts kit link here; site.css (--font) already lists it. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
 </head>
-<body data-page="about.html" data-title="About">
+<body data-page="about.html" data-title="About" >
 <main>
 <div id="status" class="status" role="status"></div>
 <div id="content" hidden>
 <section class="wrap split">
-  <!-- Photo comes from content.json ("photo"); this grey placeholder shows until you add one -->
-  <img class="photo" data-photo alt="Portrait" loading="lazy"
-    src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Crect width='400' height='500' fill='%23D4D4D4'/%3E%3Ccircle cx='200' cy='190' r='70' fill='%236B6B6B'/%3E%3Cpath d='M60 500c0-110 60-170 140-170s140 60 140 170z' fill='%236B6B6B'/%3E%3C/svg%3E">
+  <!-- Photo: put your picture at images/div-photo.jpg (path is set in content.json). Grey placeholder shows until then. -->
+  <img class="photo" data-photo alt="Portrait of DIVNFX" loading="lazy" src="images/div-photo.jpg"
+    onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 400 500%27%3E%3Crect width=%27400%27 height=%27500%27 fill=%27%23D4D4D4%27/%3E%3Ccircle cx=%27200%27 cy=%27190%27 r=%2770%27 fill=%27%236B6B6B%27/%3E%3Cpath d=%27M60 500c0-110 60-170 140-170s140 60 140 170z%27 fill=%27%236B6B6B%27/%3E%3C/svg%3E'">
   <div>
-    <h2>About</h2>
+    <h2>About me</h2>
     <p data-bind="bio"></p>
     <ul class="tags" data-skills></ul>
-    <p style="margin-bottom:0"><a class="btn" href="contact.html">Work with me</a></p>
   </div>
 </section>
 </div>

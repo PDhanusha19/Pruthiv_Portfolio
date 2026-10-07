@@ -13,75 +13,106 @@ content:
     path: content.json
     format: json
     fields:
-      - name: name
-        label: Name
+      - name: brand
+        label: Brand name (navbar + footer)
         type: string
         required: true
+
+      - name: heroHeading
+        label: Home page heading
+        type: string
 
       - name: intro
-        label: Intro (shown under the home page heading)
+        label: Intro (under the home page heading)
         type: text
-
-      - name: bio
-        label: Bio (About page)
-        type: text
-
-      - name: photo
-        label: About photo (optional — shown in black & white)
-        type: image
-
-      - name: email
-        label: Email
-        type: string
-        required: true
 
       - name: showreel
         label: Showreel link (YouTube)
         type: string
+
+      - name: bio
+        label: About me text (leave a blank line between paragraphs)
+        type: text
+
+      - name: photo
+        label: About photo (shown in black & white)
+        type: image
 
       - name: skills
         label: Skills & software
         type: string
         list: true
 
-      - name: socials
-        label: Social links
-        type: object
-        list: true
-        fields:
-          - name: platform
-            label: Platform name
-            type: select
-            options:
-              values: [Instagram, YouTube, X, LinkedIn, TikTok, Behance, Vimeo, Other]
-          - name: url
-            label: Link
-            type: string
+      - name: email
+        label: Email
+        type: string
+        required: true
 
-      - name: projects
-        label: Projects
+      - name: instagram
+        label: Instagram link
+        type: string
+
+      - name: styles
+        label: Styles (the three cards on the home page, each with its own page)
         type: object
         list: true
         fields:
+          - name: slug
+            label: Page ID (don't change)
+            type: string
+            required: true
+          - name: page
+            label: Page file (don't change)
+            type: string
+            required: true
           - name: title
             label: Title
             type: string
             required: true
-          - name: description
-            label: Description
+          - name: subtitle
+            label: Subtitle (grey line on the home card)
             type: string
-          - name: category
-            label: Category
-            type: select
-            options:
-              values: [YouTube, Instagram]
-          - name: url
-            label: Video link (YouTube or Instagram reel)
-            type: string
-            required: true
           - name: thumb
-            label: Thumbnail (optional — needed for Instagram)
+            label: Card thumbnail (optional — defaults to the main video thumbnail)
             type: image
-          - name: featured
-            label: Show on the Home page
-            type: boolean
+          - name: description
+            label: Description (1–2 short paragraphs)
+            type: text
+          - name: mainVideo
+            label: Main video link (YouTube, Instagram reel or TikTok)
+            type: string
+          - name: work
+            label: List of Work
+            type: object
+            list: true
+            fields:
+              - name: title
+                label: Title
+                type: string
+                required: true
+              - name: description
+                label: Description
+                type: string
+              - name: category
+                label: Category
+                type: select
+                options:
+                  values: [YouTube, Instagram, TikTok]
+              - name: url
+                label: Video link
+                type: string
+                required: true
+              - name: thumb
+                label: Thumbnail (optional — needed for Instagram and TikTok)
+                type: image
+          - name: frames
+            label: Selected Frames (use 3)
+            type: object
+            list: true
+            fields:
+              - name: image
+                label: Image
+                type: image
+              - name: alt
+                label: Short description of the image
+                type: string

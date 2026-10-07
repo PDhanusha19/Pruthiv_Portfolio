@@ -11,22 +11,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
 </head>
-<body data-page="projects.html" data-title="Projects" >
+<body data-page="style" data-title="" data-style="talking-head">
 <main>
 <div id="status" class="status" role="status"></div>
 <div id="content" hidden>
+<!-- STYLE PAGE: every page of this type is identical; its content comes from content.json → styles -->
 <section class="section">
   <div class="wrap">
-    <div class="head">
-      <h2>Projects</h2>
-      <div class="filters" id="filters">
-        <button class="f on" data-f="all">All</button>
-        <button class="f" data-f="youtube">YouTube</button>
-        <button class="f" data-f="instagram">Instagram</button>
-        <button class="f" data-f="tiktok">TikTok</button>
-      </div>
-    </div>
+    <h1 class="style-title" data-style-title></h1>
+    <p class="style-desc" data-style-desc></p>
+    <div class="feature" id="featureWrap"><div class="frame" id="feature"></div></div>
+  </div>
+</section>
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sub">List of Work</h2>
     <div class="grid" id="grid"></div>
+  </div>
+</section>
+<section class="frames" id="framesWrap">
+  <div class="wrap">
+    <h2 class="sub">Selected Frames</h2>
+    <div class="frames-grid" id="frames"></div>
   </div>
 </section>
 </div>

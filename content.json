@@ -1,9 +1,11 @@
 {
-  "name": "Pruthiv",
-  "intro": "A video editor specialising in YouTube content, short-form reels, and cinematic storytelling.",
-  "bio": "I'm a video editor who turns raw footage into stories people finish watching. From fast-paced YouTube edits to punchy reels and cinematic pieces, I focus on rhythm, sound and clean color. Let's make something worth sharing.",
-  "photo": "",
-  "email": "hello@example.com",
+  "brand": "DIVNFX",
+  "heroHeading": "Hello, I'm DIVNFX",
+  "intro": "A video editor, motion designer and animator specialising in short-form video production, editorial media and premium visual storytelling, always eager to develop new skills.",
+  "bio": "Hello, I'm Pruthiv, or \"divnfx\". I've been video editing and practising creative media for 4 years now.\n\nI'm a freelance video editor and producer. I design, edit, animate and produce videos. I really enjoy working on short-form projects like talking-head videos, motion graphics and editorial content, but I'm happy to work on any type of video project. I love the problem-solving side of editing and turning a client's ideas into engaging creative visuals.\n\nIn my spare time, you can find me benching some weights, playing games or practising new creative techniques.",
+  "photo": "images/div-photo.jpg",
+  "email": "REPLACE-ME@example.com",
+  "instagram": "https://instagram.com/REPLACE-ME",
   "showreel": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
   "skills": [
     "Premiere Pro",
@@ -12,17 +14,144 @@
     "Color Grading",
     "Motion Graphics"
   ],
-  "socials": [
-    { "platform": "Instagram", "url": "https://instagram.com/yourhandle" },
-    { "platform": "YouTube", "url": "https://youtube.com/@yourchannel" },
-    { "platform": "X", "url": "https://x.com/yourhandle" }
-  ],
-  "projects": [
-    { "title": "Project Title One", "description": "A short one-line description.", "category": "YouTube", "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ", "thumb": "", "featured": true },
-    { "title": "Project Title Two", "description": "A short one-line description.", "category": "YouTube", "url": "https://youtu.be/eRsGyueVLvQ", "thumb": "", "featured": true },
-    { "title": "Reel Title Three", "description": "A short one-line description.", "category": "Instagram", "url": "https://www.instagram.com/reel/REEL_ID_1/", "thumb": "", "featured": true },
-    { "title": "Project Title Four", "description": "A short one-line description.", "category": "YouTube", "url": "https://www.youtube.com/watch?v=R6MlUcmOul8", "thumb": "", "featured": false },
-    { "title": "Reel Title Five", "description": "A short one-line description.", "category": "Instagram", "url": "https://www.instagram.com/reel/REEL_ID_2/", "thumb": "", "featured": false },
-    { "title": "Project Title Six", "description": "A short one-line description.", "category": "YouTube", "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ", "thumb": "", "featured": false }
+  "styles": [
+    {
+      "slug": "talking-head",
+      "page": "talking-head.html",
+      "title": "Talking Head Style",
+      "subtitle": "Professional podcast explainer shorts",
+      "thumb": "",
+      "description": "Clean, confident edits built around the person on screen. Tight pacing, punchy captions, sound design and subtle zooms keep podcast clips and explainers watchable from the first second to the last.\n\nPerfect for creators and brands who want short-form videos that feel professional and personal.",
+      "mainVideo": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+      "work": [
+        {
+          "title": "Talking Head Work 1",
+          "description": "Replace with a one-line description.",
+          "category": "YouTube",
+          "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+          "thumb": ""
+        },
+        {
+          "title": "Talking Head Work 2",
+          "description": "Replace with a one-line description.",
+          "category": "YouTube",
+          "url": "https://youtu.be/eRsGyueVLvQ",
+          "thumb": ""
+        },
+        {
+          "title": "Talking Head Work 3",
+          "description": "Replace with a one-line description.",
+          "category": "TikTok",
+          "url": "https://www.tiktok.com/@yourhandle/video/0000000000000000000",
+          "thumb": ""
+        }
+      ],
+      "frames": [
+        {
+          "image": "images/talking-head-frame-1.svg",
+          "alt": "Talking Head Style — frame 1"
+        },
+        {
+          "image": "images/talking-head-frame-2.svg",
+          "alt": "Talking Head Style — frame 2"
+        },
+        {
+          "image": "images/talking-head-frame-3.svg",
+          "alt": "Talking Head Style — frame 3"
+        }
+      ]
+    },
+    {
+      "slug": "motion-graphics",
+      "page": "motion-graphics.html",
+      "title": "Motion Graphic Style",
+      "subtitle": "Informative reels",
+      "thumb": "",
+      "description": "Kinetic type, animated data and illustrated explainers that turn dense information into quick, memorable visuals. Every transition and easing curve is designed to guide the eye and keep viewers hooked.\n\nIdeal for informative reels and social storytelling that need to teach something fast.",
+      "mainVideo": "https://youtu.be/eRsGyueVLvQ",
+      "work": [
+        {
+          "title": "Motion Graphic Work 1",
+          "description": "Replace with a one-line description.",
+          "category": "YouTube",
+          "url": "https://www.youtube.com/watch?v=R6MlUcmOul8",
+          "thumb": ""
+        },
+        {
+          "title": "Motion Graphic Work 2",
+          "description": "Replace with a one-line description.",
+          "category": "Instagram",
+          "url": "https://www.instagram.com/reel/REEL_ID_1/",
+          "thumb": ""
+        },
+        {
+          "title": "Motion Graphic Work 3",
+          "description": "Replace with a one-line description.",
+          "category": "YouTube",
+          "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+          "thumb": ""
+        }
+      ],
+      "frames": [
+        {
+          "image": "images/motion-graphics-frame-1.svg",
+          "alt": "Motion Graphic Style — frame 1"
+        },
+        {
+          "image": "images/motion-graphics-frame-2.svg",
+          "alt": "Motion Graphic Style — frame 2"
+        },
+        {
+          "image": "images/motion-graphics-frame-3.svg",
+          "alt": "Motion Graphic Style — frame 3"
+        }
+      ]
+    },
+    {
+      "slug": "saas-ui",
+      "page": "saas-ui.html",
+      "title": "SaaS UI Style",
+      "subtitle": "Concise explainers & clean minimal visuals",
+      "thumb": "",
+      "description": "Concise explainers for software and apps, showing the product with clean, minimal visuals. Smooth UI animations, clear callouts and calm pacing make features easy to understand in seconds.\n\nBuilt for startups and product teams who want launch videos and walkthroughs that look sharp and premium.",
+      "mainVideo": "https://www.youtube.com/watch?v=R6MlUcmOul8",
+      "work": [
+        {
+          "title": "SaaS UI Work 1",
+          "description": "Replace with a one-line description.",
+          "category": "YouTube",
+          "url": "https://youtu.be/eRsGyueVLvQ",
+          "thumb": ""
+        },
+        {
+          "title": "SaaS UI Work 2",
+          "description": "Replace with a one-line description.",
+          "category": "YouTube",
+          "url": "https://www.youtube.com/watch?v=R6MlUcmOul8",
+          "thumb": ""
+        },
+        {
+          "title": "SaaS UI Work 3",
+          "description": "Replace with a one-line description.",
+          "category": "YouTube",
+          "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+          "thumb": ""
+        }
+      ],
+      "frames": [
+        {
+          "image": "images/saas-ui-frame-1.svg",
+          "alt": "SaaS UI Style — frame 1"
+        },
+        {
+          "image": "images/saas-ui-frame-2.svg",
+          "alt": "SaaS UI Style — frame 2"
+        },
+        {
+          "image": "images/saas-ui-frame-3.svg",
+          "alt": "SaaS UI Style — frame 3"
+        }
+      ]
+    }
   ]
 }

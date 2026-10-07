@@ -24,7 +24,7 @@ button{font:inherit;cursor:pointer;color:inherit}
 h1,h2,h3{letter-spacing:-.03em}
 h1,h2{text-transform:uppercase;font-weight:800;line-height:1}
 h2{font-size:clamp(1.8rem,4vw,3rem)}
-.wrap{max-width:1200px;margin:0 auto;padding-inline:var(--pad)}
+.wrap{max-width:1344px;margin:0 auto;padding-inline:var(--pad)}
 .lead{color:var(--grey);font-size:clamp(1rem,1.8vw,1.2rem)}
 
 .btn{display:inline-block;background:var(--black);color:var(--white);border:1px solid var(--black);padding:13px 26px;
@@ -67,10 +67,11 @@ h2{font-size:clamp(1.8rem,4vw,3rem)}
 .hero{text-align:center;padding:clamp(28px,6vh,64px) var(--pad) clamp(24px,4vh,40px)}
 .hero h1{font-size:clamp(2.2rem,7vw,5rem);margin-bottom:1rem}
 .hero p{max-width:40em;margin:0 auto}
-.band{background:var(--soft);padding:clamp(24px,4vh,48px) 0}
-.reel{max-width:860px;margin:0 auto}
+.band{background:var(--soft);padding:clamp(28px,5vh,64px) 0}
+.reel{max-width:1200px;margin:0 auto}
+@media(max-width:620px){.band .wrap{padding-inline:12px}}
 .frame{position:relative;aspect-ratio:16/9;background:var(--black);border-radius:8px;overflow:hidden}
-.reel .frame{box-shadow:0 25px 50px -12px rgba(0,0,0,.35)}
+.reel .frame{border-radius:12px;box-shadow:0 40px 90px -20px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.18)}
 .frame iframe,.frame>button{position:absolute;inset:0;width:100%;height:100%;border:0}
 .frame>button{background:none;border:0;overflow:hidden}
 .frame img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease-out}
@@ -81,6 +82,7 @@ h2{font-size:clamp(1.8rem,4vw,3rem)}
 .playbtn svg{width:30px;height:30px;fill:var(--black);margin-left:4px}
 .section{padding:clamp(40px,7vh,72px) 0}
 .more{text-align:center;margin-top:40px}
+.head.center{justify-content:center;text-align:center}
 
 /* ---------- Projects grid ---------- */
 .head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
@@ -102,7 +104,7 @@ h2{font-size:clamp(1.8rem,4vw,3rem)}
 .card:hover .thumb::after{opacity:1}
 .card:hover .thumb svg,.card:focus-visible .thumb svg{opacity:1;transform:translate(-50%,-50%)}
 .card .meta{padding:16px}
-.card h3{font-size:1.1rem;font-weight:500;margin-bottom:4px}
+.card h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
 .card p{font-size:.88rem;color:var(--grey)}
 
 /* ---------- About / Contact (fit one screen on desktop) ---------- */
@@ -124,10 +126,13 @@ input:focus,textarea:focus{outline:0;border-color:var(--black)}
 textarea{min-height:130px;resize:vertical}
 form .btn{cursor:pointer}
 
-/* ---------- Footer ---------- */
-footer{border-top:1px solid var(--line);padding:22px var(--pad);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:.85rem}
-footer div{display:flex;gap:24px;color:var(--grey)}
-footer a:hover{color:var(--black)}
+/* ---------- Footer (same container + side padding as the page) ---------- */
+footer{border-top:1px solid var(--line);padding-block:20px;font-size:.85rem}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#footLinks{display:flex;align-items:center;gap:4px}
+#footLinks a{width:40px;height:40px;display:grid;place-items:center;transition:opacity .25s}
+#footLinks a:hover{opacity:.55}
+@media(max-width:620px){footer .wrap{flex-direction:column;justify-content:center;text-align:center}}
 
 /* ---------- Modal ---------- */
 #modal{position:fixed;inset:0;z-index:80;background:rgba(10,10,10,.88);display:flex;align-items:center;justify-content:center;padding:24px;
@@ -135,7 +140,7 @@ footer a:hover{color:var(--black)}
 #modal.open{opacity:1;visibility:visible;transition:opacity .3s}
 #modal .box{position:relative;width:min(1000px,100%)}
 #modal .frame{margin:0 auto}
-#modal .frame.v{aspect-ratio:9/16;width:auto;height:min(80vh,800px);max-width:100%}
+.frame.v{aspect-ratio:9/16;height:auto;width:min(100%,calc(min(80vh,800px)*9/16));margin-inline:auto}
 #modal .close{position:absolute;top:-48px;right:0;width:40px;height:40px;background:none;border:0;color:#fff;font-size:2rem;line-height:1}
 #mTitle{color:#fff;opacity:.8;text-align:center;font-size:.9rem;margin-top:12px}
 
@@ -157,3 +162,25 @@ footer a:hover{color:var(--black)}
 .spinner{width:28px;height:28px;border:2px solid var(--line);border-top-color:var(--black);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 [data-bind="bio"]{white-space:pre-line}
+
+/* ---------- Style detail pages ---------- */
+.style-title{font-size:clamp(2.4rem,7vw,5rem);margin-bottom:1.2rem}
+.style-desc{max-width:44em;white-space:pre-line;color:var(--grey);font-size:clamp(1rem,1.6vw,1.15rem)}
+.feature{margin-top:clamp(28px,5vh,48px)}
+.feature .frame{box-shadow:0 30px 70px -20px rgba(0,0,0,.4)}
+.sub{font-size:clamp(1.4rem,3vw,2rem);margin-bottom:24px}
+.frames{background:var(--soft);padding:clamp(40px,7vh,72px) 0;margin-top:clamp(24px,5vh,56px)}
+.frames-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:620px){.frames-grid{grid-template-columns:1fr}}
+.frame-btn{display:block;padding:0;border:0;background:#e4e4e4;border-radius:8px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 8px 24px rgba(0,0,0,.08);transition:box-shadow .3s}
+.frame-btn:hover{box-shadow:0 14px 34px rgba(0,0,0,.18)}
+.frame-btn img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.frame-btn:hover img{transform:scale(1.04)}
+a.card{color:inherit}
+
+/* Lightbox for still frames */
+#lightbox{position:fixed;inset:0;z-index:90;background:rgba(10,10,10,.92);display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+#lightbox.open{opacity:1;visibility:visible;transition:opacity .3s}
+#lightbox img{max-width:100%;max-height:88vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+#lightbox .close{position:absolute;top:16px;right:20px;width:44px;height:44px;background:none;border:0;color:#fff;font-size:2.2rem;line-height:1}
