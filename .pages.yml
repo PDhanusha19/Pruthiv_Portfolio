@@ -7,13 +7,10 @@ media:
   output: /images        # and referenced on the website as            /images/<file>
 
 content:
-  # ---------------------------------------------------------------------------
-  # DESIGN SETTINGS — change the look of the whole website without touching code.
-  # RESET TO ORIGINAL: set every dropdown back to the value marked "Original" below
-  # (or clear a field / delete the value) and the site falls back to its original design.
-  # ---------------------------------------------------------------------------
-  - name: design
-    label: Design Settings
+  # ONE entry on purpose: Pages CMS rewrites content.json from the fields listed here, so any field
+  # missing from the form would be deleted on save. Design Settings is therefore the first section of this form.
+  - name: site
+    label: Website content
     type: file
     path: content.json
     format: json
@@ -155,12 +152,6 @@ content:
                 options:
                   values: [Left, Center]
 
-  - name: site
-    label: Website content
-    type: file
-    path: content.json
-    format: json
-    fields:
       - name: brand
         label: Brand name (navbar + footer)
         type: string
