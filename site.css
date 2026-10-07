@@ -58,7 +58,7 @@ h2{font-size:clamp(1.8rem,4vw,3rem)}
 #overlay{position:fixed;inset:0;z-index:40;background:var(--white);display:flex;flex-direction:column;justify-content:center;padding:0 var(--pad);
   transform:translateY(-100%);visibility:hidden;transition:transform .5s var(--ease),visibility 0s .5s}
 #overlay.open{transform:none;visibility:visible;transition:transform .5s var(--ease)}
-#overlay a{display:block;font-size:clamp(2.5rem,13vw,4.5rem);font-weight:800;text-transform:uppercase;letter-spacing:-.04em;line-height:1.15;
+#overlay a{display:block;font-size:clamp(1.6rem,8vw,2.6rem);font-weight:800;text-transform:uppercase;letter-spacing:-.03em;line-height:1.3;
   opacity:0;transform:translateY(40px);transition:transform .3s,opacity .3s}
 #overlay.open a{opacity:1;transform:none;transition:transform .6s var(--ease),opacity .5s;transition-delay:calc(.25s + var(--i)*.08s)}
 @media(max-width:800px){.menu{display:none}.burger{display:block}}
