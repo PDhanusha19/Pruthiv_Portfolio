@@ -47,9 +47,11 @@ const nav_ = (overlay) => PAGES.map(([href,label],i) => {
 document.body.insertAdjacentHTML("afterbegin", `
   <div id="progress"></div>
   <header id="nav">
-    <div class="nav-item" style="--i:0"><a class="logo" href="index.html" data-bind="brand">DIVNFX</a></div>
-    <ul class="menu">${nav_(false)}</ul>
-    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="nav-in">
+      <div class="nav-item" style="--i:0"><a class="logo" href="index.html" data-bind="brand">DIVNFX</a></div>
+      <ul class="menu">${nav_(false)}</ul>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
   </header>
   <nav id="overlay" aria-label="Mobile">${nav_(true)}</nav>`);
 document.body.insertAdjacentHTML("beforeend", `
@@ -261,7 +263,6 @@ function setMenu(o){
   burger.classList.toggle("open", o); overlay.classList.toggle("open", o);
   burger.setAttribute("aria-expanded", o); burger.setAttribute("aria-label", o ? "Close menu" : "Open menu");
   document.documentElement.classList.toggle("lock", o);
-  if (o) nav.classList.remove("hidden");
 }
 burger.addEventListener("click", () => setMenu(!overlay.classList.contains("open")));
 addEventListener("keydown", e => { if (e.key === "Escape"){ closeModal(); closeLightbox(); setMenu(false); } });
@@ -279,15 +280,12 @@ document.addEventListener("click", e => {
 });
 addEventListener("pageshow", () => document.body.classList.remove("leaving"));
 
-let lastY = scrollY, tick = false;
+let tick = false;
 function onScroll(){
   const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
   $("#progress").style.transform = `scaleX(${max > 0 ? y / max : 0})`;
   nav.classList.toggle("scrolled", y > 60);
-  if (!overlay.classList.contains("open")){
-    if (y > lastY && y > 120) nav.classList.add("hidden"); else if (y < lastY) nav.classList.remove("hidden");
-  }
-  lastY = y; tick = false;
+  tick = false;
 }
 addEventListener("scroll", () => { if (!tick){ tick = true; requestAnimationFrame(onScroll); } }, { passive:true });
 onScroll();
