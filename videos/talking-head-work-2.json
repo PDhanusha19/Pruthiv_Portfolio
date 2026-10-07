@@ -1,0 +1,14 @@
+{
+  "id": "talking-head-work-2",
+  "title": "Talking Head Work 2",
+  "description": "Replace with a one-line description.",
+  "categories": [
+    "talking-head"
+  ],
+  "videoUrl": "https://youtu.be/eRsGyueVLvQ",
+  "videoPlatform": "YouTube",
+  "thumbnail": "",
+  "displayOrder": 2,
+  "createdAt": "2026-10-08",
+  "updatedAt": "2026-10-08"
+}

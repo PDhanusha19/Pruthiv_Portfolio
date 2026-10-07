@@ -1,8 +1,9 @@
 /* ==========================================================
-   All editable content lives in content.json
-   (brand, hero, bio, email, Instagram, showreel, the three styles
-   and their videos / frames). Edit that file by hand or through
-   Pages CMS — no need to touch this one.
+   Nothing to edit here for normal updates. Everything is managed in Pages CMS:
+     content.json   -> site text, contact links
+     settings.json  -> design + typography
+     data.json      -> projects, videos, categories (built automatically from
+                       the categories/, projects/ and videos/ folders)
    ========================================================== */
 const $ = (s, r=document) => r.querySelector(s), $$ = (s, r=document) => [...r.querySelectorAll(s)];
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -122,8 +123,20 @@ function applyDesign(raw){
   st.setProperty("--style-align", ALIGN[sk][0]);
   st.setProperty("--style-ml", sk === "Center" ? "auto" : "0"); st.setProperty("--style-mr", "auto");
 }
-/* Re-use the last design instantly so there is no flash of the old look between pages */
-try { const cached = localStorage.getItem("design"); if (cached) applyDesign(JSON.parse(cached)); } catch (e) {}
+/* ---------- Typography (settings.json -> "typography") - exact pixel sizes, one place for the whole site ----------
+   "Original" (or anything that isn't like "15px") keeps the site's original responsive size. */
+const TYPO_VARS = { bodySize:"--fs-body", introSize:"--fs-intro", descriptionSize:"--fs-desc", cardTextSize:"--fs-card", cardTitleSize:"--fs-card-title", menuSize:"--fs-menu" };
+function applyTypography(t){
+  t = t && typeof t === "object" ? t : {};
+  for (const [key, cssVar] of Object.entries(TYPO_VARS)){
+    const m = String(t[key] || "").trim().match(/^(\d{2})px$/), px = m ? +m[1] : 0;
+    if (px >= 10 && px <= 32) document.documentElement.style.setProperty(cssVar, px + "px");
+    else document.documentElement.style.removeProperty(cssVar);
+  }
+}
+function applySettings(S){ S = S && typeof S === "object" ? S : {}; applyDesign(S.design); applyTypography(S.typography); }
+/* Re-use the last settings instantly so there is no flash of the old look between pages */
+try { const cached = localStorage.getItem("settings"); if (cached) applySettings(JSON.parse(cached)); } catch (e) {}
 
 /* ---------- Shared layout (navbar, menu, footer, modal, lightbox) — built right away ---------- */
 const current = document.body.dataset.page;
@@ -230,38 +243,89 @@ function cardEl(tag, title, sub, thumb){
   const meta = el("div","meta"); meta.append(el("h3","",title), el("p","",sub || ""));
   c.append(th, meta); return c;
 }
-let styles = [], items = [];
-function renderGrid(filter="all"){
-  const grid = $("#grid"); if (!grid) return;
-  grid.replaceChildren();
-  if (grid.dataset.mode === "styles"){                       // Home: three style cards → their own pages
-    styles.forEach(s => {
-      const v = parseVideo({ url: s.mainVideo });
-      const c = cardEl("a", s.title, s.subtitle, s.thumb ? safeUrl(s.thumb) : (v && v.thumb));
-      c.href = s.page; grid.append(c);
-    });
-    return;
-  }
-  const list = items.filter(p => filter === "all" || p.platform === filter);   // Projects / style pages: popup cards
-  if (!list.length){ grid.append(el("p","lead","No videos to show here yet.")); return; }
-  list.forEach(p => {
-    const c = cardEl("button", p.title, p.description, p.thumb ? (p.platform === "youtube" ? p.thumb : safeUrl(p.thumb)) : "");
-    c.addEventListener("click", () => openModal(p, c));
-    grid.append(c);
-  });
+/* data.json (built from the CMS collections): { categories, projects, videos } */
+const DATA = { categories:[], projects:[], videos:[] };
+const media = item => parseVideo({ url: item.videoUrl, thumb: item.thumbnail ? safeUrl(item.thumbnail) : "" });
+const cardThumb = (item, v) => v ? v.thumb : (item.thumbnail ? safeUrl(item.thumbnail) : "");
+function shortText(t, n = 90){
+  const s = String(t || "").split(/\n\s*\n/)[0].replace(/\s+/g, " ").trim();
+  return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, "") + "…" : s;
+}
+function projectCard(p){                 // project -> opens its own page (video, description, selected frames)
+  const c = cardEl("a", p.title, p.subtitle || shortText(p.description), cardThumb(p, media(p)));
+  c.href = "project.html?id=" + encodeURIComponent(p.id); return c;
+}
+function videoCard(item){                // video -> plays in the popup
+  const v = media(item), c = cardEl("button", item.title, item.description, cardThumb(item, v));
+  if (v) c.addEventListener("click", () => openModal({ ...v, title: item.title }, c));
+  return c;
 }
 
-/* ---------- Build the page from content.json ---------- */
-function build(C){
-  styles = C.styles || [];
-  const slug = document.body.dataset.style;
-  const style = slug ? styles.find(s => s.slug === slug) : null;
-  if (slug && !style) throw new Error("Style not found in content.json: " + slug);
+/* ---------- Grids: Home (featured projects) and Projects page (tabs + platform filter) ---------- */
+const view = { tab:"projects", platform:"all" };
+function renderTabs(){
+  const box = $("#tabs"); if (!box) return;
+  box.replaceChildren();
+  [["projects","All Projects"], ["videos","All Videos"], ...DATA.categories.map(c => [c.id, c.name])].forEach(([id, label]) => {
+    const b = el("button", "f" + (view.tab === id ? " on" : ""), label); b.dataset.tab = id; box.append(b);
+  });
+}
+function renderGrid(){
+  const grid = $("#grid"); if (!grid) return;
+  grid.replaceChildren();
+  let entries;
+  if (grid.dataset.mode === "featured"){
+    entries = DATA.projects.filter(p => p.isFeatured).map(p => ["project", p]);
+    if (!entries.length){ grid.append(el("p","lead","No featured projects yet.")); return; }
+  } else {
+    const P = DATA.projects.map(p => ["project", p]), V = DATA.videos.map(v => ["video", v]);
+    entries = view.tab === "projects" ? P : view.tab === "videos" ? V : [...P, ...V].filter(([, i]) => i.categories.includes(view.tab));
+    if (view.platform !== "all") entries = entries.filter(([, i]) => { const v = media(i); return v && v.platform === view.platform; });
+    if (!entries.length){ grid.append(el("p","lead","Nothing to show here yet.")); return; }
+  }
+  entries.forEach(([kind, item]) => grid.append(kind === "project" ? projectCard(item) : videoCard(item)));
+}
 
-  applyDesign(C.design);
-  try { localStorage.setItem("design", JSON.stringify(C.design || {})); } catch (e) {}
+/* ---------- Single project page (project.html?id=... and the three original style pages) ---------- */
+function buildProject(C, id){
+  const p = DATA.projects.find(x => x.id === id);
+  if (!p){
+    const wrap = el("div","wrap"), sec = el("section","section");
+    const back = el("a","btn","See all projects"); back.href = "projects.html";
+    wrap.append(el("h2","","Project not found"), el("p","lead","This project may have been removed or renamed."), back);
+    sec.append(wrap); content.replaceChildren(sec); document.title = "Project not found — " + C.brand; return;
+  }
+  document.title = `${p.title} — ${C.brand}`;
+  $("[data-p-title]").textContent = p.title;
+  $("[data-p-desc]").textContent = p.description || "";
+  const cats = p.categories.map(cid => DATA.categories.find(c => c.id === cid)).filter(Boolean), cbox = $("[data-p-cats]");
+  if (cats.length) cats.forEach((c, i) => {
+    if (i) cbox.append(" · ");
+    const a = el("a","",c.name); a.href = "projects.html?category=" + encodeURIComponent(c.id); cbox.append(a);
+  }); else cbox.hidden = true;
+  const v = media(p);
+  if (v) mountPlayer($("#feature"), v, p.title); else $("#featureWrap").hidden = true;
+  const fg = $("#frames"), frames = p.selectedFrames || [];
+  frames.forEach((src, i) => {
+    const alt = `${p.title} — frame ${i + 1}`;
+    const b = el("button","frame-btn"); b.setAttribute("aria-label", "Enlarge " + alt);
+    const img = document.createElement("img"); img.loading = "lazy"; img.alt = alt; safeImg(img, src, ""); b.append(img);
+    b.addEventListener("click", () => openLightbox(src, alt, b));
+    fg.append(b);
+  });
+  if (!frames.length) $("#framesWrap").hidden = true;
+}
 
-  document.title = (style ? style.title : document.body.dataset.title) ? `${style ? style.title : document.body.dataset.title} — ${C.brand}` : `${C.brand} — Video Editor`;
+/* ---------- Build the page ---------- */
+function build(C, S, D){
+  applySettings(S);
+  try { localStorage.setItem("settings", JSON.stringify(S || {})); } catch (e) {}
+  const arr = x => Array.isArray(x) ? x : [];
+  DATA.categories = arr(D.categories).filter(c => c && c.id);
+  DATA.projects = arr(D.projects).filter(p => p && p.id).map(p => ({ categories:[], selectedFrames:[], ...p }));
+  DATA.videos   = arr(D.videos).filter(v => v && v.id).map(v => ({ categories:[], ...v }));
+
+  document.title = document.body.dataset.title ? `${document.body.dataset.title} — ${C.brand}` : `${C.brand} — Video Editor`;
   $$("[data-bind]").forEach(e => { const v = C[e.dataset.bind]; if (v != null) e.textContent = v; });
 
   // About
@@ -286,32 +350,25 @@ function build(C){
     });
   });
 
-  // Videos: a style page uses its own list; Projects page shows every style's list
-  const all = (style ? [style] : styles).flatMap(s => s.work || []);
-  items = all.map(parseVideo).filter(Boolean);
-  renderGrid();
+  // Projects page: ?category=<id> opens that category directly
+  const wanted = new URLSearchParams(location.search).get("category");
+  if (wanted && DATA.categories.some(c => c.id === wanted)) view.tab = wanted;
+  renderTabs(); renderGrid();
+  const tabs = $("#tabs");
+  tabs && tabs.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    view.tab = b.dataset.tab; renderTabs(); renderGrid();
+  });
   const filters = $("#filters");
   filters && filters.addEventListener("click", e => {
     const btn = e.target.closest("button"); if (!btn) return;
     $$(".f", filters).forEach(x => x.classList.toggle("on", x === btn));
-    renderGrid(btn.dataset.f);
+    view.platform = btn.dataset.f; renderGrid();
   });
 
-  // Style detail page
-  if (style){
-    $("[data-style-title]").textContent = style.title;
-    $("[data-style-desc]").textContent = style.description || "";
-    const fv = parseVideo({ url: style.mainVideo });
-    if (fv) mountPlayer($("#feature"), fv, style.title); else $("#featureWrap").hidden = true;
-    const fg = $("#frames");
-    (style.frames || []).forEach(f => {
-      const b = el("button","frame-btn"); b.setAttribute("aria-label", "Enlarge " + (f.alt || "frame"));
-      const i = document.createElement("img"); i.loading = "lazy"; i.alt = f.alt || ""; safeImg(i, f.image, ""); b.append(i);
-      b.addEventListener("click", () => openLightbox(f.image, f.alt, b));
-      fg.append(b);
-    });
-    if (!(style.frames || []).length) $("#framesWrap").hidden = true;
-  }
+  // Project page
+  const pid = document.body.dataset.project;
+  if (pid !== undefined) buildProject(C, pid || new URLSearchParams(location.search).get("id"));
 
   // Showreel (home)
   const reelFrame = $("#reelFrame");
@@ -328,18 +385,24 @@ function build(C){
   });
 }
 
-/* ---------- Load content.json with loading + error states ---------- */
+/* ---------- Load content.json + settings.json + data.json (loading + error states) ---------- */
 const status = $("#status"), content = $("#content");
+async function getJSON(file, optional){
+  try {
+    const r = await fetch(file, { cache: "no-store" });
+    if (!r.ok) throw new Error(file + " -> HTTP " + r.status);
+    return await r.json();
+  } catch (e) { if (optional) return null; throw e; }
+}
 async function load(){
   status.hidden = false; content.hidden = true;
   status.replaceChildren(el("span","spinner"), el("span","","Loading…"));
   try {
-    const r = await fetch("content.json", { cache: "no-store" });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    build(await r.json());
+    const [C, S, D] = await Promise.all([getJSON("content.json"), getJSON("settings.json", true), getJSON("data.json")]);
+    build(C, S, D);
     status.hidden = true; content.hidden = false;
   } catch (err) {
-    console.error("Could not build the page from content.json:", err);
+    console.error("Could not build the page:", err);
     const msg = el("p","", location.protocol === "file:"
       ? "This page can't read its content when opened straight from a file. Run it from a web server (or the hosted site) and it will load."
       : "Sorry, we couldn't load the content just now. Please check your connection and try again.");
@@ -361,7 +424,7 @@ addEventListener("resize", () => { if (innerWidth > 800) setMenu(false); });
 
 /* Page transition: fade out, then go to the next page (delegated so dynamic cards work too) */
 document.addEventListener("click", e => {
-  const a = e.target.closest('a[href$=".html"]');
+  const a = e.target.closest('a[href*=".html"]');
   if (!a || e.metaKey || e.ctrlKey || e.shiftKey || a.target) return;
   const href = a.getAttribute("href");
   e.preventDefault(); setMenu(false);

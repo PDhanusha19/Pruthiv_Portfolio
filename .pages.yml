@@ -1,24 +1,223 @@
 # Pages CMS configuration — https://pagescms.org
-# Lets a non-technical person edit content.json through simple forms.
-# Keep this file at the ROOT of your GitHub repository (next to index.html and content.json).
+# This is the whole "admin" for the portfolio. Keep this file at the ROOT of the GitHub repository.
+#
+# MENU (left side of Pages CMS)
+#   Projects            add / edit / delete projects, mark Featured, categories, video, thumbnail, selected frames
+#   Videos              extra videos (shown on the Projects page, open in a popup)
+#   Categories          add / rename / delete categories
+#   Typography & Design font sizes (px), fonts, colors, alignment
+#   Site content        name, intro, bio, photo, email, social links, showreel
+#
+# Every entry owns its OWN file, so saving one never touches or deletes another (Pages CMS rewrites a file
+# from the fields listed here). After you save, a small GitHub Action rebuilds data.json and the site updates.
 
 media:
   input: images          # uploaded images are saved in the repo folder  /images
-  output: /images        # and referenced on the website as            /images/<file>
+  output: /images        # and used on the website as                   /images/<file>
 
 content:
-  # ONE entry on purpose: Pages CMS rewrites content.json from the fields listed here, so any field
-  # missing from the form would be deleted on save. Design Settings is therefore the first section of this form.
-  - name: site
-    label: Website content
+  # ---------------------------------------------------------------- PROJECTS
+  - name: projects
+    label: Projects
+    type: collection
+    path: projects
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [isFeatured, categories, displayOrder]
+    fields:
+      - name: title
+        label: Project title
+        type: string
+        required: true
+      - name: subtitle
+        label: Short line (grey text under the title on cards)
+        type: string
+        description: "Optional. If empty, the first sentence of the description is used."
+      - name: description
+        label: Description
+        type: text
+        description: "Shown on the project page. Leave a blank line between paragraphs."
+      - name: isFeatured
+        label: Featured project
+        type: boolean
+        default: false
+        description: "ON = this project appears in 'Featured Projects' on the Home page. OFF = it disappears from there (it stays on the Projects page)."
+      - name: categories
+        label: Categories
+        type: reference
+        options:
+          collection: categories
+          multiple: true
+          search: name
+        description: "Pick one or more. Add new categories in the 'Categories' menu first."
+      - name: videoUrl
+        label: Video link
+        type: string
+        description: "Paste a YouTube, Instagram reel or TikTok link (any format). It plays on the project page — no upload needed."
+      - name: videoPlatform
+        label: Video platform
+        type: select
+        default: Auto-detect
+        options:
+          values: [Auto-detect, YouTube, Instagram, TikTok]
+        description: "Leave on Auto-detect. The site works it out from the link."
+      - name: thumbnail
+        label: Thumbnail / cover image
+        type: image
+        description: "Optional for YouTube (its thumbnail is used automatically). Needed for Instagram and TikTok."
+      - name: selectedFrames
+        label: Selected frames
+        type: image
+        list: true
+        description: "Still images shown under the video. Click '+' to add more. Drag to change the order."
+      - name: displayOrder
+        label: Display order
+        type: number
+        description: "Small numbers come first (1, 2, 3...). Leave empty to put it last."
+      - name: createdAt
+        label: Created
+        type: date
+        description: "Optional."
+      - name: updatedAt
+        label: Last updated
+        type: date
+        description: "Optional."
+
+  # ---------------------------------------------------------------- VIDEOS
+  - name: videos
+    label: Videos
+    type: collection
+    path: videos
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [categories, videoPlatform, displayOrder]
+    fields:
+      - name: title
+        label: Video title
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: string
+        description: "One short line shown on the card."
+      - name: categories
+        label: Categories
+        type: reference
+        options:
+          collection: categories
+          multiple: true
+          search: name
+        description: "Pick one or more."
+      - name: videoUrl
+        label: Video link
+        type: string
+        required: true
+        description: "Paste a YouTube, Instagram reel or TikTok link. It opens in a popup on the website."
+      - name: videoPlatform
+        label: Video platform
+        type: select
+        default: Auto-detect
+        options:
+          values: [Auto-detect, YouTube, Instagram, TikTok]
+        description: "Leave on Auto-detect."
+      - name: thumbnail
+        label: Thumbnail image
+        type: image
+        description: "Optional for YouTube. Needed for Instagram and TikTok."
+      - name: displayOrder
+        label: Display order
+        type: number
+        description: "Small numbers come first."
+      - name: createdAt
+        label: Created
+        type: date
+      - name: updatedAt
+        label: Last updated
+        type: date
+
+  # ---------------------------------------------------------------- CATEGORIES
+  - name: categories
+    label: Categories
+    type: collection
+    path: categories
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: name
+      fields: [createdAt]
+    fields:
+      - name: name
+        label: Category name
+        type: string
+        required: true
+        description: "Shown as a button on the Projects page. Renaming it is safe. If you delete a category, its projects and videos stay on the site (just without that category)."
+      - name: createdAt
+        label: Created
+        type: date
+        description: "Categories appear in this order (oldest first)."
+
+  # ---------------------------------------------------------------- TYPOGRAPHY & DESIGN  (settings.json)
+  - name: settings
+    label: Typography & Design
     type: file
-    path: content.json
+    path: settings.json
     format: json
     fields:
+      - name: typography
+        label: Typography (font sizes)
+        type: object
+        description: "Exact text sizes in pixels. 'Original' keeps the site's built-in responsive size. Changes apply to every page."
+        fields:
+          - name: bodySize
+            label: Body text
+            type: select
+            default: 16px
+            options:
+              values: [14px, 15px, 16px, 17px, 18px]
+            description: "The base size of normal text. (Original: 16px)"
+          - name: introSize
+            label: Home intro text
+            type: select
+            default: Original
+            options:
+              values: [Original, 14px, 15px, 16px, 17px, 18px, 20px]
+            description: "The grey line under the big HELLO heading."
+          - name: descriptionSize
+            label: Descriptions (project, About, Contact)
+            type: select
+            default: Original
+            options:
+              values: [Original, 14px, 15px, 16px, 17px, 18px]
+            description: "Project descriptions and the About text."
+          - name: cardTextSize
+            label: Card text (grey line on cards)
+            type: select
+            default: Original
+            options:
+              values: [Original, 13px, 14px, 15px, 16px]
+            description: "The grey line under each card title. (Original is about 14px)"
+          - name: cardTitleSize
+            label: Card titles
+            type: select
+            default: Original
+            options:
+              values: [Original, 16px, 17px, 18px, 20px]
+            description: "Project and video titles on cards. (Original is about 17.6px)"
+          - name: menuSize
+            label: Menu links
+            type: select
+            default: Original
+            options:
+              values: [Original, 12px, 13px, 14px, 15px]
+            description: "HOME / PROJECTS / ABOUT / CONTACT in the top bar. (Original is about 13px)"
       - name: design
         label: Design Settings
         type: object
-        description: "Changes the look of every page. ORIGINAL values: fonts Balto, sizes Medium, heading/text color Black #0A0A0A, grey text #6B6B6B, hero Center, section headings Original (as designed), About Left, Style pages Left. To reset, pick these again or clear the field."
+        description: "Changes the look of every page. ORIGINAL values: fonts Balto, sizes Medium, heading/text color Black #0A0A0A, grey text #6B6B6B, hero Center, section headings Original (as designed), About Left, Project pages Left. To reset, pick these again or clear the field."
         fields:
           - name: fonts
             label: Fonts
@@ -27,42 +226,35 @@ content:
               - name: heading
                 label: Heading font
                 type: select
-                description: "The font for big titles like HELLO, I'M DIVNFX and the menu. (Original: Balto)"
                 default: Balto
                 options:
                   values: [Balto, Libre Franklin, Inter, Archivo, Bebas Neue, Space Grotesk]
+                description: "Big titles like HELLO, I'M DIVNFX and the menu. (Original: Balto)"
               - name: body
                 label: Body text font
                 type: select
-                description: "The font for paragraphs, descriptions and buttons. (Original: Balto)"
                 default: Balto
                 options:
                   values: [Balto, Libre Franklin, Inter, Archivo, Bebas Neue, Space Grotesk]
+                description: "Paragraphs, descriptions and buttons. (Original: Balto)"
           - name: sizes
-            label: Font Sizes
+            label: Heading sizes
             type: object
             fields:
               - name: hero
                 label: Hero heading size
                 type: select
-                description: "Changes the big HELLO heading on the home page (and the title on style pages). (Original: Medium)"
                 default: Medium
                 options:
                   values: [Small, Medium, Large, Extra Large]
+                description: "The big HELLO heading on the home page and project titles. (Original: Medium)"
               - name: section
                 label: Section heading size
                 type: select
-                description: "Changes headings like FEATURED PROJECTS, ABOUT ME and SELECTED FRAMES. (Original: Medium)"
                 default: Medium
                 options:
                   values: [Small, Medium, Large]
-              - name: body
-                label: Body text size
-                type: select
-                description: "Changes paragraphs, descriptions and card text. (Original: Medium)"
-                default: Medium
-                options:
-                  values: [Small, Medium, Large]
+                description: "Headings like FEATURED PROJECTS and ABOUT ME. (Original: Medium)"
           - name: colors
             label: Colors
             type: object
@@ -70,7 +262,6 @@ content:
               - name: heading
                 label: Heading color
                 type: select
-                description: "Color of all titles. Pick a ready-made color. (Original: #0A0A0A)"
                 default: "#0A0A0A"
                 options:
                   values:
@@ -80,14 +271,14 @@ content:
                     - { value: "#6B6B6B", label: "Grey (#6B6B6B)" }
                     - { value: "#9A9A9A", label: "Light Grey (#9A9A9A)" }
                     - { value: "#FFFFFF", label: "White (#FFFFFF) - invisible on the white page, ignored" }
+                description: "Color of all titles. (Original: Black)"
               - name: headingCustom
-                label: Heading color - custom color (optional)
+                label: Heading color - custom (optional)
                 type: string
-                description: "Optional. Type your own color like #1A1A1A. When filled in, it replaces the swatch above. Leave empty to use the swatch."
+                description: "Type your own color like #1A1A1A to replace the choice above. Leave empty to use the choice."
               - name: text
                 label: Body text color
                 type: select
-                description: "Color of normal text. Pick a ready-made color. (Original: #0A0A0A)"
                 default: "#0A0A0A"
                 options:
                   values:
@@ -97,14 +288,14 @@ content:
                     - { value: "#6B6B6B", label: "Grey (#6B6B6B)" }
                     - { value: "#9A9A9A", label: "Light Grey (#9A9A9A)" }
                     - { value: "#FFFFFF", label: "White (#FFFFFF) - invisible on the white page, ignored" }
+                description: "Color of normal text. (Original: Black)"
               - name: textCustom
-                label: Body text color - custom color (optional)
+                label: Body text color - custom (optional)
                 type: string
-                description: "Optional. Type your own color like #1A1A1A. When filled in, it replaces the swatch above. Leave empty to use the swatch."
+                description: "Optional custom color like #1A1A1A."
               - name: muted
                 label: Secondary (grey) text color
                 type: select
-                description: "Color of descriptions, menu links and small details. Pick a ready-made color. (Original: #6B6B6B)"
                 default: "#6B6B6B"
                 options:
                   values:
@@ -114,10 +305,11 @@ content:
                     - { value: "#6B6B6B", label: "Grey (#6B6B6B)" }
                     - { value: "#9A9A9A", label: "Light Grey (#9A9A9A)" }
                     - { value: "#FFFFFF", label: "White (#FFFFFF) - invisible on the white page, ignored" }
+                description: "Descriptions, menu links and small details. (Original: Grey #6B6B6B)"
               - name: mutedCustom
-                label: Secondary (grey) text color - custom color (optional)
+                label: Secondary text color - custom (optional)
                 type: string
-                description: "Optional. Type your own color like #1A1A1A. When filled in, it replaces the swatch above. Leave empty to use the swatch."
+                description: "Optional custom color like #777777."
           - name: alignment
             label: Alignment
             type: object
@@ -126,140 +318,72 @@ content:
               - name: hero
                 label: Hero text alignment
                 type: select
-                description: "Aligns the HELLO heading and intro on the home page. (Original: Center)"
                 default: Center
                 options:
                   values: [Left, Center, Right]
+                description: "The HELLO heading and intro on the home page. (Original: Center)"
               - name: sections
                 label: Section headings alignment
                 type: select
-                description: "Aligns headings like FEATURED PROJECTS and ABOUT ME on every page. 'Original' keeps the designed layout (Featured Projects centered, others left). (Original: Original (as designed))"
                 default: "Original (as designed)"
                 options:
                   values: ["Original (as designed)", Left, Center, Right]
+                description: "'Original' keeps the designed layout (Featured Projects centered, others left)."
               - name: about
                 label: About section text alignment
                 type: select
-                description: "Aligns the text on the About page. (Original: Left)"
                 default: Left
                 options:
                   values: [Left, Center, Justify]
+                description: "The text on the About page. (Original: Left)"
               - name: styles
-                label: Style pages alignment (title + description)
+                label: Project pages alignment (title + description)
                 type: select
-                description: "Aligns the title and description on Talking Head, Motion Graphic and SaaS UI pages. (Original: Left)"
                 default: Left
                 options:
                   values: [Left, Center]
+                description: "Title and description on project pages. (Original: Left)"
 
+  # ---------------------------------------------------------------- SITE CONTENT  (content.json)
+  - name: site
+    label: Site content
+    type: file
+    path: content.json
+    format: json
+    fields:
       - name: brand
         label: Brand name (navbar + footer)
         type: string
         required: true
-
       - name: heroHeading
         label: Home page heading
         type: string
-
       - name: intro
         label: Intro (under the home page heading)
         type: text
-
       - name: showreel
         label: Showreel link (YouTube)
         type: string
-
       - name: bio
         label: About me text (leave a blank line between paragraphs)
         type: text
-
       - name: photo
         label: About photo (shown in black & white)
         type: image
-
       - name: skills
         label: Skills & software
         type: string
         list: true
-
       - name: email
         label: Email
         type: string
         required: true
-
       - name: instagram
         label: Instagram link
         type: string
-
       - name: tiktok
         label: TikTok profile link
         type: string
-
       - name: whatsapp
         label: WhatsApp number with country code (e.g. +94771234567)
         type: string
-
-      - name: styles
-        label: Styles (the three cards on the home page, each with its own page)
-        type: object
-        list: true
-        fields:
-          - name: slug
-            label: Page ID (don't change)
-            type: string
-            required: true
-          - name: page
-            label: Page file (don't change)
-            type: string
-            required: true
-          - name: title
-            label: Title
-            type: string
-            required: true
-          - name: subtitle
-            label: Subtitle (grey line on the home card)
-            type: string
-          - name: thumb
-            label: Card thumbnail (optional — defaults to the main video thumbnail)
-            type: image
-          - name: description
-            label: Description (1–2 short paragraphs)
-            type: text
-          - name: mainVideo
-            label: Main video link (YouTube, Instagram reel or TikTok)
-            type: string
-          - name: work
-            label: List of Work
-            type: object
-            list: true
-            fields:
-              - name: title
-                label: Title
-                type: string
-                required: true
-              - name: description
-                label: Description
-                type: string
-              - name: category
-                label: Category
-                type: select
-                options:
-                  values: [YouTube, Instagram, TikTok]
-              - name: url
-                label: Video link
-                type: string
-                required: true
-              - name: thumb
-                label: Thumbnail (optional — needed for Instagram and TikTok)
-                type: image
-          - name: frames
-            label: Selected Frames (use 3)
-            type: object
-            list: true
-            fields:
-              - name: image
-                label: Image
-                type: image
-              - name: alt
-                label: Short description of the image
-                type: string

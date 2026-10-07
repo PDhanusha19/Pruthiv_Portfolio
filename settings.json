@@ -1,0 +1,31 @@
+{
+  "design": {
+    "fonts": {
+      "heading": "Balto",
+      "body": "Balto"
+    },
+    "sizes": {
+      "hero": "Small",
+      "section": "Medium"
+    },
+    "colors": {
+      "heading": "#0A0A0A",
+      "text": "#0A0A0A",
+      "muted": "#6B6B6B"
+    },
+    "alignment": {
+      "hero": "Center",
+      "sections": "Original (as designed)",
+      "about": "Left",
+      "styles": "Left"
+    }
+  },
+  "typography": {
+    "bodySize": "16px",
+    "introSize": "Original",
+    "descriptionSize": "Original",
+    "cardTextSize": "Original",
+    "cardTitleSize": "Original",
+    "menuSize": "Original"
+  }
+}

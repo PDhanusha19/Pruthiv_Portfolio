@@ -1,0 +1,21 @@
+{
+  "id": "motion-graphics",
+  "title": "Motion Graphic Style",
+  "subtitle": "Informative reels",
+  "description": "Kinetic type, animated data and illustrated explainers that turn dense information into quick, memorable visuals. Every transition and easing curve is designed to guide the eye and keep viewers hooked.\n\nIdeal for informative reels and social storytelling that need to teach something fast.",
+  "categories": [
+    "motion-graphics"
+  ],
+  "videoUrl": "https://youtu.be/eRsGyueVLvQ",
+  "videoPlatform": "YouTube",
+  "thumbnail": "",
+  "selectedFrames": [
+    "/images/motion-graphics-frame-1.svg",
+    "/images/motion-graphics-frame-2.svg",
+    "/images/motion-graphics-frame-3.svg"
+  ],
+  "isFeatured": true,
+  "displayOrder": 2,
+  "createdAt": "2026-10-08",
+  "updatedAt": "2026-10-08"
+}

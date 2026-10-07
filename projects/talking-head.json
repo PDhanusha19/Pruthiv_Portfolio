@@ -1,0 +1,21 @@
+{
+  "id": "talking-head",
+  "title": "Talking Head Style",
+  "subtitle": "Professional podcast explainer shorts",
+  "description": "Clean, confident edits built around the person on screen. Tight pacing, punchy captions, sound design and subtle zooms keep podcast clips and explainers watchable from the first second to the last.\n\nPerfect for creators and brands who want short-form videos that feel professional and personal.",
+  "categories": [
+    "talking-head"
+  ],
+  "videoUrl": "https://www.instagram.com/reel/DcCHycxOVI-/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==",
+  "videoPlatform": "Instagram",
+  "thumbnail": "",
+  "selectedFrames": [
+    "/images/talking-head-frame-1.svg",
+    "/images/talking-head-frame-2.svg",
+    "/images/talking-head-frame-3.svg"
+  ],
+  "isFeatured": true,
+  "displayOrder": 1,
+  "createdAt": "2026-10-08",
+  "updatedAt": "2026-10-08"
+}
