@@ -1,4 +1,26 @@
 {
+  "design": {
+    "fonts": {
+      "heading": "Balto",
+      "body": "Balto"
+    },
+    "sizes": {
+      "hero": "Small",
+      "section": "Medium",
+      "body": "Medium"
+    },
+    "colors": {
+      "heading": "#0A0A0A",
+      "text": "#0A0A0A",
+      "muted": "#6B6B6B"
+    },
+    "alignment": {
+      "hero": "Center",
+      "sections": "Original (as designed)",
+      "about": "Left",
+      "styles": "Left"
+    }
+  },
   "brand": "DIVNFX",
   "heroHeading": "HELLO, I’M DIV OR “DIVNFX”",
   "intro": "A video editor, motion designer and animator specialising in short-form video production, editorial media and premium visual storytelling, always eager to develop new skills.",
@@ -16,31 +38,6 @@
   "instagram": "https://instagram.com/REPLACE-ME",
   "tiktok": "https://www.tiktok.com/@REPLACE-ME",
   "whatsapp": "+00000000000",
-  "design": {
-    "fonts": {
-      "heading": "Balto",
-      "body": "Balto"
-    },
-    "sizes": {
-      "hero": "Medium",
-      "section": "Medium",
-      "body": "Medium"
-    },
-    "colors": {
-      "heading": "#0A0A0A",
-      "headingCustom": "",
-      "text": "#0A0A0A",
-      "textCustom": "",
-      "muted": "#6B6B6B",
-      "mutedCustom": ""
-    },
-    "alignment": {
-      "hero": "Center",
-      "sections": "Original (as designed)",
-      "about": "Left",
-      "styles": "Left"
-    }
-  },
   "styles": [
     {
       "slug": "talking-head",
