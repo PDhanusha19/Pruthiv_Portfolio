@@ -6,12 +6,13 @@
   "categories": [
     "saas-ui"
   ],
-  "videoUrl": "https://youtu.be/JE_YAU-xru8",
+  "videoUrl": "https://youtu.be/Q7zDzL6lNAE",
   "videoPlatform": "YouTube",
+  "thumbnail": "/images/thumbnail.png",
   "selectedFrames": [
-    "/images/saas-ui-frame-1.svg",
-    "/images/saas-ui-frame-2.svg",
-    "/images/saas-ui-frame-3.svg"
+    "/images/thumbnail-1.png",
+    "/images/2.png",
+    "/images/3.png"
   ],
   "displayOrder": 3,
   "createdAt": "2026-10-08",
