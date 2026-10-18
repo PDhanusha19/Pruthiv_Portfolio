@@ -1,20 +1,18 @@
 {
-  "id": "saas-ui",
   "title": "SaaS UI Style",
   "subtitle": "Concise explainers & clean minimal visuals",
   "description": "Concise explainers for software and apps, showing the product with clean, minimal visuals. Smooth UI animations, clear callouts and calm pacing make features easy to understand in seconds.\n\nBuilt for startups and product teams who want launch videos and walkthroughs that look sharp and premium.",
+  "isFeatured": true,
   "categories": [
     "saas-ui"
   ],
-  "videoUrl": "https://www.youtube.com/watch?v=R6MlUcmOul8",
+  "videoUrl": "https://youtu.be/JE_YAU-xru8",
   "videoPlatform": "YouTube",
-  "thumbnail": "",
   "selectedFrames": [
     "/images/saas-ui-frame-1.svg",
     "/images/saas-ui-frame-2.svg",
     "/images/saas-ui-frame-3.svg"
   ],
-  "isFeatured": true,
   "displayOrder": 3,
   "createdAt": "2026-10-08",
   "updatedAt": "2026-10-08"
