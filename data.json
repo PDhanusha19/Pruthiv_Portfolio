@@ -6,14 +6,14 @@
       "createdAt": "2026-10-08T09:00:00"
     },
     {
-      "id": "motion-graphics",
-      "name": "Motion Graphics",
-      "createdAt": "2026-10-08T09:01:00"
-    },
-    {
       "id": "saas-ui",
       "name": "SaaS UI",
       "createdAt": "2026-10-08T09:02:00"
+    },
+    {
+      "id": "motion-graphics",
+      "name": "Documentary Style",
+      "createdAt": "2026-11-02"
     }
   ],
   "projects": [
