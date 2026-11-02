@@ -1,19 +1,17 @@
 {
-  "title": "Motion Graphic Style",
-  "subtitle": "Informative reels",
-  "description": "Kinetic type, animated data and illustrated explainers that turn dense information into quick, memorable visuals. Every transition and easing curve is designed to guide the eye and keep viewers hooked.\n\nIdeal for informative reels and social storytelling that need to teach something fast.",
+  "title": "Documentary Style",
+  "subtitle": "Editorial media",
+  "description": "A quick look at the mighty history of the Honda NSX - from Honda's economy car days to the supercar that beat Ferrari at its own game for half the price.\n\nI spent a lot of time meticulously making the animations and finding archive footage. The style is inspired by Vox videos, with an original mix of funky texture and playful movements.",
   "isFeatured": true,
-  "categories": [
-    "motion-graphics"
-  ],
   "videoUrl": "https://youtu.be/3fzwBkiXBiw?si=WwspjUkkqteSUmSp",
   "videoPlatform": "YouTube",
+  "thumbnail": "/images/LEGEND-1.png",
   "selectedFrames": [
-    "/images/motion-graphics-frame-1.svg",
-    "/images/motion-graphics-frame-2.svg",
-    "/images/motion-graphics-frame-3.svg"
+    "/images/pic 1-1.png",
+    "/images/Untitled Linked Comp 01 (0-01-05-17)-1.png",
+    "/images/Untitled Linked Comp 01 (0-01-24-06)-1.png"
   ],
-  "displayOrder": 2,
+  "displayOrder": 3,
   "createdAt": "2026-10-08",
   "updatedAt": "2026-10-08"
 }
