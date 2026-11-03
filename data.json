@@ -1,42 +1,43 @@
 {
   "categories": [
     {
-      "id": "talking-head",
-      "name": "Talking Head",
+      "id": "short-reels",
+      "name": "Short Reels",
+      "displayOrder": 1,
       "createdAt": "2026-10-08T09:00:00"
     },
     {
       "id": "saas-ui",
       "name": "SaaS UI",
+      "displayOrder": 2,
       "createdAt": "2026-10-08T09:02:00"
     },
     {
       "id": "motion-graphics",
       "name": "Documentary Style",
+      "displayOrder": 3,
       "createdAt": "2026-11-02"
     }
   ],
   "projects": [
     {
-      "id": "talking-head",
-      "title": "Talking Head Style",
-      "subtitle": "Professional podcast explainer shorts",
-      "description": "Clean, confident edits built around the person on screen. Tight pacing, punchy captions, sound design and subtle zooms keep podcast clips and explainers watchable from the first second to the last.\n\nPerfect for creators and brands who want short-form videos that feel professional and personal.",
+      "id": "short-reels",
+      "title": "Short Reels",
+      "subtitle": "YouTube Shorts edited for creators and podcasts",
+      "description": "YouTube Shorts edited for creators and podcasts.",
       "categories": [
-        "talking-head"
+        "short-reels"
       ],
-      "videoUrl": "https://youtube.com/shorts/p0BGtRigCmY?feature=share",
-      "videoPlatform": "YouTube",
+      "videoUrl": "",
+      "videoPlatform": "",
       "thumbnail": "",
-      "selectedFrames": [
-        "/images/talking-head-frame-1.svg",
-        "/images/talking-head-frame-2.svg",
-        "/images/talking-head-frame-3.svg"
-      ],
+      "selectedFrames": [],
       "isFeatured": true,
+      "linkUrl": "/projects/short-reels/",
+      "reelsCollage": true,
       "displayOrder": 1,
-      "createdAt": "2026-10-08",
-      "updatedAt": "2026-10-08"
+      "createdAt": "2026-11-03",
+      "updatedAt": "2026-11-03"
     },
     {
       "id": "saas-ui",
@@ -55,6 +56,8 @@
         "/images/3.png"
       ],
       "isFeatured": true,
+      "linkUrl": "",
+      "reelsCollage": false,
       "displayOrder": 2,
       "createdAt": "2026-10-08",
       "updatedAt": "2026-10-08"
@@ -64,7 +67,9 @@
       "title": "A Short and Brief History of the NSX",
       "subtitle": "Editorial media",
       "description": "A quick look at the mighty history of the Honda NSX - from Honda's economy car days to the supercar that beat Ferrari at its own game for half the price.\n\nI spent a lot of time meticulously making the animations and finding archive footage. The style is inspired by Vox videos, with an original mix of funky texture and playful movements.",
-      "categories": [],
+      "categories": [
+        "motion-graphics"
+      ],
       "videoUrl": "https://youtu.be/3fzwBkiXBiw?si=WwspjUkkqteSUmSp",
       "videoPlatform": "YouTube",
       "thumbnail": "/images/LEGEND-1.png",
@@ -74,137 +79,21 @@
         "/images/Untitled Linked Comp 01 (0-01-24-06)-1.png"
       ],
       "isFeatured": true,
+      "linkUrl": "",
+      "reelsCollage": false,
       "displayOrder": 3,
       "createdAt": "2026-10-08",
       "updatedAt": "2026-10-08"
     }
   ],
-  "videos": [
+  "reels": [
     {
-      "id": "talking-head-work-1",
-      "title": "Talking Head Work 1",
-      "description": "Replace with a one-line description.",
-      "categories": [
-        "talking-head"
-      ],
-      "videoUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
-      "videoPlatform": "YouTube",
+      "id": "reel-1",
+      "title": "Reel 1",
+      "url": "https://youtube.com/shorts/p0BGtRigCmY?feature=share",
+      "videoId": "p0BGtRigCmY",
       "thumbnail": "",
-      "displayOrder": 1,
-      "createdAt": "2026-10-08",
-      "updatedAt": "2026-10-08"
-    },
-    {
-      "id": "talking-head-work-2",
-      "title": "Talking Head Work 2",
-      "description": "Replace with a one-line description.",
-      "categories": [
-        "talking-head"
-      ],
-      "videoUrl": "https://youtu.be/eRsGyueVLvQ",
-      "videoPlatform": "YouTube",
-      "thumbnail": "",
-      "displayOrder": 2,
-      "createdAt": "2026-10-08",
-      "updatedAt": "2026-10-08"
-    },
-    {
-      "id": "talking-head-work-3",
-      "title": "Talking Head Work 3",
-      "description": "Replace with a one-line description.",
-      "categories": [
-        "talking-head"
-      ],
-      "videoUrl": "https://www.tiktok.com/@yourhandle/video/0000000000000000000",
-      "videoPlatform": "TikTok",
-      "thumbnail": "",
-      "displayOrder": 3,
-      "createdAt": "2026-10-08",
-      "updatedAt": "2026-10-08"
-    },
-    {
-      "id": "motion-graphics-work-1",
-      "title": "Motion Graphic Work 1",
-      "description": "Replace with a one-line description.",
-      "categories": [
-        "motion-graphics"
-      ],
-      "videoUrl": "https://www.youtube.com/watch?v=R6MlUcmOul8",
-      "videoPlatform": "YouTube",
-      "thumbnail": "",
-      "displayOrder": 11,
-      "createdAt": "2026-10-08",
-      "updatedAt": "2026-10-08"
-    },
-    {
-      "id": "motion-graphics-work-2",
-      "title": "Motion Graphic Work 2",
-      "description": "Replace with a one-line description.",
-      "categories": [
-        "motion-graphics"
-      ],
-      "videoUrl": "https://www.instagram.com/reel/REEL_ID_1/",
-      "videoPlatform": "Instagram",
-      "thumbnail": "",
-      "displayOrder": 12,
-      "createdAt": "2026-10-08",
-      "updatedAt": "2026-10-08"
-    },
-    {
-      "id": "motion-graphics-work-3",
-      "title": "Motion Graphic Work 3",
-      "description": "Replace with a one-line description.",
-      "categories": [
-        "motion-graphics"
-      ],
-      "videoUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
-      "videoPlatform": "YouTube",
-      "thumbnail": "",
-      "displayOrder": 13,
-      "createdAt": "2026-10-08",
-      "updatedAt": "2026-10-08"
-    },
-    {
-      "id": "saas-ui-work-1",
-      "title": "SaaS UI Work 1",
-      "description": "Replace with a one-line description.",
-      "categories": [
-        "saas-ui"
-      ],
-      "videoUrl": "https://youtu.be/JE_YAU-xru8",
-      "videoPlatform": "YouTube",
-      "thumbnail": "",
-      "displayOrder": 21,
-      "createdAt": "2026-10-08",
-      "updatedAt": "2026-10-08"
-    },
-    {
-      "id": "saas-ui-work-2",
-      "title": "SaaS UI Work 2",
-      "description": "Replace with a one-line description.",
-      "categories": [
-        "saas-ui"
-      ],
-      "videoUrl": "https://www.youtube.com/watch?v=R6MlUcmOul8",
-      "videoPlatform": "YouTube",
-      "thumbnail": "",
-      "displayOrder": 22,
-      "createdAt": "2026-10-08",
-      "updatedAt": "2026-10-08"
-    },
-    {
-      "id": "saas-ui-work-3",
-      "title": "SaaS UI Work 3",
-      "description": "Replace with a one-line description.",
-      "categories": [
-        "saas-ui"
-      ],
-      "videoUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
-      "videoPlatform": "YouTube",
-      "thumbnail": "",
-      "displayOrder": 23,
-      "createdAt": "2026-10-08",
-      "updatedAt": "2026-10-08"
+      "displayOrder": 1
     }
   ]
 }

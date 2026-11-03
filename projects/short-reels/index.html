@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Everything on this site is addressed from the site root, so this page can live in a sub-folder -->
+<base href="/">
+<title>Short Reels — DIVNFX</title>
+<meta name="description" content="YouTube Shorts edited for creators and podcasts. Tight pacing, punchy captions and clean sound by DIVNFX.">
+<meta property="og:title" content="Short Reels — DIVNFX">
+<meta property="og:description" content="YouTube Shorts edited for creators and podcasts. Tight pacing, punchy captions and clean sound by DIVNFX.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body data-page="projects.html" data-title="Short Reels">
+<main>
+<div id="status" class="status" role="status"></div>
+<div id="content" hidden>
+<!-- SHORT REELS PAGE: reels come from data/reels (Pages CMS → Short Reels). Add, hide or reorder them there. -->
+<section class="section">
+  <div class="wrap">
+    <a class="back" href="projects.html">← Back to Projects</a>
+    <h1 class="style-title">Short Reels</h1>
+    <p class="style-desc" data-bind="reelsIntro"></p>
+    <div class="grid reels-grid" id="reels"></div>
+    <div class="reel-actions"><a class="btn" href="contact.html">Work with me</a></div>
+  </div>
+</section>
+</div>
+</main>
+<script src="site.js"></script>
+</body>
+</html>

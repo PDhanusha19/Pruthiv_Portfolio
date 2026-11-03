@@ -1,4 +1,4 @@
-# Rebuilds data.json whenever you save a project, video or category in Pages CMS.
+# Rebuilds data.json whenever you save a project, short reel or category in Pages CMS.
 # (data.json is the single file the website reads. No setup needed — it runs by itself.)
 name: Build data.json
 
@@ -6,9 +6,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "categories/**"
-      - "projects/**"
-      - "videos/**"
+      - "data/**"
       - "build-data.js"
   workflow_dispatch:
 

@@ -6,20 +6,21 @@ You manage the whole portfolio in **Pages CMS** (app.pagescms.org → this repos
 
 | Menu item | What it does |
 |---|---|
-| **Projects** | Add / edit / delete projects. Title, description, categories, video link, thumbnail, selected frames, **Featured** switch, display order. |
-| **Videos** | Extra videos that appear on the Projects page and play in a popup. |
-| **Categories** | Add / rename / delete categories (they become buttons on the Projects page). |
+| **Projects** | The cards on Home and the Projects page: title, short description, category, 16:9 thumbnail, **Featured on homepage**, **Published**, display order, optional video. |
+| **Short Reels** | The vertical YouTube Shorts on the Short Reels page. Paste a Shorts link — the video ID and thumbnail are automatic. |
+| **Categories** | The filter buttons on the Projects page (All Projects + one per category). |
 | **Typography & Design** | Text sizes in pixels (14px / 15px / 16px …), fonts, colors, alignment. |
-| **Site content** | Name, intro, bio, photo, email, social links, showreel. |
+| **Site content** | Name, intro, bio, photo, email, social links, showreel, Short Reels intro line. |
 
 ## Everyday tasks
 
-- **Add a project** — Projects → *Add an entry*. Fill in the title, paste the YouTube/Instagram/TikTok link, pick categories, add frames, *Save*.
-- **Put a project on the Home page** — open it, switch **Featured project** ON, Save. Switch it OFF to remove it from the Home page.
-- **Change the order** — set **Display order** (1 comes first). Frames can be dragged to reorder.
-- **Add a category** — Categories → *Add an entry*, type the name, Save. Then tick it inside projects/videos.
-- **Delete a category** — Categories → open it → Delete. Projects/videos that used it stay on the site, just without that category.
-- **Change text sizes** — Typography & Design → Typography. Pick *Original* to go back to the built-in size.
+- **Add a reel** — Short Reels → *Add an entry* → title + Shorts link → Save. It appears on `/projects/short-reels/` by itself.
+- **Hide / show a reel** — switch **Published** OFF / ON. **Reorder** — change **Display order** (1 first).
+- **Add a project** — Projects → *Add an entry*. Pick its **Category**, add a 16:9 thumbnail, Save.
+- **Move a project to another filter** — open it, change **Category**, Save.
+- **Feature a project on the Home page** — **Featured on homepage** ON (OFF to remove). Home shows the featured projects in *Display order*.
+- **Add / rename a category** — Categories → *Add an entry* (or open one and change the name). It becomes a filter button automatically.
+- **Delete a category** — its projects stay on the site under *All Projects*.
 
 ## How updates reach the website
 
@@ -28,15 +29,13 @@ redeploys (about a minute). Then hard-refresh the site (Ctrl+Shift+R).
 
 ## Files (only if you are curious)
 
-- `projects/`, `videos/`, `categories/` — one small file per item, written by the CMS
+- `data/projects/`, `data/reels/`, `data/categories/` — one small file per item, written by the CMS (the file name is the slug)
 - `data.json` — built from those folders by `build-data.js` (don't edit by hand)
-- `content.json` — site text and contact links
-- `settings.json` — design and typography
-- `.pages.yml` — the CMS forms
+- `content.json` — site text and contact links · `settings.json` — design and typography
+- `.pages.yml` — the CMS forms · `archive/` — old unused files (safe to delete)
+- `projects/short-reels/index.html` — the Short Reels page (address: `/projects/short-reels/`)
 
 ## Notes
 
-- **Thumbnails:** YouTube thumbnails are automatic. Instagram and TikTok need a thumbnail image.
-- **TikTok links:** paste the full link (`tiktok.com/@name/video/123…`). Short `vm.tiktok.com` links can't be played.
-- **Ids:** each item's id comes from its file name; the categories, platform and order are handled automatically.
-- **Preview locally:** double-click `start-site.bat`. If you edit the folders by hand, run `node build-data.js` first.
+- **Reels:** the cover is the YouTube thumbnail cropped to 9:16. Upload a thumbnail only if you want a different cover.
+- **Preview locally:** double-click `start-site.bat`. If you edit the data folders by hand, run `node build-data.js` first.

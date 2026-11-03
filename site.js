@@ -138,7 +138,7 @@ function applySettings(S){ S = S && typeof S === "object" ? S : {}; applyDesign(
 /* Re-use the last settings instantly so there is no flash of the old look between pages */
 try { const cached = localStorage.getItem("settings"); if (cached) applySettings(JSON.parse(cached)); } catch (e) {}
 
-/* ---------- Shared layout (navbar, menu, footer, modal, lightbox) — built right away ---------- */
+/* ---------- Shared layout (navbar, menu, footer, lightbox) — built right away ---------- */
 const current = document.body.dataset.page;
 const nav_ = (overlay) => PAGES.map(([href,label],i) => {
   const a = el("a", !overlay && href === current ? "active" : "", label); a.href = href;
@@ -162,9 +162,6 @@ document.body.insertAdjacentHTML("beforeend", `
       <div id="footLinks"></div>
     </div>
   </footer>
-  <div id="modal" role="dialog" aria-modal="true" aria-label="Video player">
-    <div class="box"><button class="close" id="mClose" aria-label="Close video">&times;</button><div class="frame" id="mFrame"></div><p id="mTitle"></p></div>
-  </div>
   <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
     <button class="close" id="lbClose" aria-label="Close image">&times;</button><img alt="">
   </div>`);
@@ -204,22 +201,7 @@ function mountPlayer(frame, v, title){
   } else frame.replaceChildren(makeIframe(v.embed, title, true));
 }
 
-/* Popup player — video plays inside the site; removing the iframe stops it */
-const modal = $("#modal"), mFrame = $("#mFrame"); let lastFocus;
-function openModal(p, from){
-  lastFocus = from;
-  mFrame.className = "frame" + (p.vertical ? " v" : "");
-  mFrame.replaceChildren(makeIframe(embedSrc(p), p.title || "Video"));
-  $("#mTitle").textContent = p.title || "";
-  modal.classList.add("open"); document.documentElement.classList.add("lock"); $("#mClose").focus();
-}
-function closeModal(){
-  if (!modal.classList.contains("open")) return;
-  modal.classList.remove("open"); mFrame.replaceChildren();
-  document.documentElement.classList.remove("lock"); lastFocus && lastFocus.focus();
-}
-$("#mClose").addEventListener("click", closeModal);
-modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+let lastFocus;
 
 /* Image lightbox (Selected Frames) */
 const lb = $("#lightbox");
@@ -238,52 +220,93 @@ lb.addEventListener("click", e => { if (e.target === lb) closeLightbox(); });
 function cardEl(tag, title, sub, thumb){
   const c = el(tag, "card");
   const th = el("div","thumb");
-  if (thumb){ const i = document.createElement("img"); i.loading = "lazy"; i.alt = ""; i.src = thumb; th.append(i); }
+  if (thumb instanceof Node) th.append(thumb);
+  else if (thumb){ const i = document.createElement("img"); i.loading = "lazy"; i.alt = ""; i.src = thumb; th.append(i); }
   th.append(svg(`<path d="${PLAY_PATH}"/>`));
   const meta = el("div","meta"); meta.append(el("h3","",title), el("p","",sub || ""));
   c.append(th, meta); return c;
 }
-/* data.json (built from the CMS collections): { categories, projects, videos } */
-const DATA = { categories:[], projects:[], videos:[] };
+/* data.json (built from the CMS collections): { categories, projects, reels } */
+const DATA = { categories:[], projects:[], reels:[] };
 const media = item => parseVideo({ url: item.videoUrl, thumb: item.thumbnail ? safeUrl(item.thumbnail) : "" });
 const cardThumb = (item, v) => v ? v.thumb : (item.thumbnail ? safeUrl(item.thumbnail) : "");
 function shortText(t, n = 90){
   const s = String(t || "").split(/\n\s*\n/)[0].replace(/\s+/g, " ").trim();
   return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, "") + "…" : s;
 }
-function projectCard(p){                 // project -> opens its own page (video, description, selected frames)
-  const c = cardEl("a", p.title, p.subtitle || shortText(p.description), cardThumb(p, media(p)));
-  c.href = "project.html?id=" + encodeURIComponent(p.id); return c;
+
+/* ---------- Short Reels thumbnails ----------
+   Auto: the YouTube thumbnail of the Short (a 16:9 image with the vertical video in the middle), cropped to 9:16.
+   A thumbnail uploaded in the CMS always wins. */
+function reelImg(r, crop){
+  const img = document.createElement("img"); img.loading = "lazy"; img.alt = "";
+  const auto = () => {
+    if (crop) img.classList.add("ytshort");
+    img.onerror = () => { img.onerror = null; img.classList.add("hq"); img.src = `https://img.youtube.com/vi/${r.videoId}/hqdefault.jpg`; };
+    img.src = `https://img.youtube.com/vi/${r.videoId}/maxresdefault.jpg`;
+  };
+  if (r.thumbnail){ img.onerror = () => { img.onerror = null; auto(); }; img.src = safeUrl(r.thumbnail); } else auto();
+  return img;
 }
-function videoCard(item){                // video -> plays in the popup
-  const v = media(item), c = cardEl("button", item.title, item.description, cardThumb(item, v));
-  if (v) c.addEventListener("click", () => openModal({ ...v, title: item.title }, c));
+/* Card image for the "Short Reels" project: one reel = its thumbnail, several = a collage of the first three */
+function collageNode(){
+  const list = DATA.reels.slice(0, 3);
+  if (!list.length) return null;
+  if (list.length === 1) return reelImg(list[0], false);
+  const box = el("div","cells");
+  list.forEach(r => { const cell = el("div","cell"); cell.append(reelImg(r, true)); box.append(cell); });
+  return box;
+}
+
+function projectCard(p){
+  let thumb = cardThumb(p, media(p));
+  if (p.reelsCollage && !p.thumbnail) thumb = collageNode() || thumb;
+  const c = cardEl("a", p.title, p.subtitle || shortText(p.description), thumb);
+  c.href = p.linkUrl ? safeUrl(p.linkUrl) : "project.html?id=" + encodeURIComponent(p.id);   // a project can open its own page (e.g. Short Reels)
   return c;
 }
 
-/* ---------- Grids: Home (featured projects) and Projects page (tabs + platform filter) ---------- */
-const view = { tab:"projects", platform:"all" };
+/* ---------- Grids: Home (featured projects) and Projects page (filters built from the CMS categories) ---------- */
+const view = { tab:"projects" };
 function renderTabs(){
   const box = $("#tabs"); if (!box) return;
   box.replaceChildren();
-  [["projects","All Projects"], ["videos","All Videos"], ...DATA.categories.map(c => [c.id, c.name])].forEach(([id, label]) => {
+  [["projects","All Projects"], ...DATA.categories.map(c => [c.id, c.name])].forEach(([id, label]) => {
     const b = el("button", "f" + (view.tab === id ? " on" : ""), label); b.dataset.tab = id; box.append(b);
   });
 }
 function renderGrid(){
   const grid = $("#grid"); if (!grid) return;
   grid.replaceChildren();
-  let entries;
-  if (grid.dataset.mode === "featured"){
-    entries = DATA.projects.filter(p => p.isFeatured).map(p => ["project", p]);
-    if (!entries.length){ grid.append(el("p","lead","No featured projects yet.")); return; }
-  } else {
-    const P = DATA.projects.map(p => ["project", p]), V = DATA.videos.map(v => ["video", v]);
-    entries = view.tab === "projects" ? P : view.tab === "videos" ? V : [...P, ...V].filter(([, i]) => i.categories.includes(view.tab));
-    if (view.platform !== "all") entries = entries.filter(([, i]) => { const v = media(i); return v && v.platform === view.platform; });
-    if (!entries.length){ grid.append(el("p","lead","Nothing to show here yet.")); return; }
-  }
-  entries.forEach(([kind, item]) => grid.append(kind === "project" ? projectCard(item) : videoCard(item)));
+  const featured = grid.dataset.mode === "featured";
+  const list = DATA.projects.filter(p => featured ? p.isFeatured : (view.tab === "projects" || p.categories.includes(view.tab)));
+  if (!list.length){ grid.append(el("p","lead", featured ? "No featured projects yet." : "Nothing to show here yet.")); return; }
+  list.forEach(p => grid.append(projectCard(p)));
+}
+
+/* ---------- Short Reels page: thumbnail first, the YouTube Shorts player loads only on click ---------- */
+let stopReel = null;
+function renderReels(){
+  const grid = $("#reels"); if (!grid) return;
+  grid.replaceChildren();
+  if (!DATA.reels.length){ grid.append(el("p","lead","New reels are coming soon.")); return; }
+  DATA.reels.forEach(r => {
+    const card = el("div","card"), th = el("div","thumb reel-thumb");
+    const idle = () => {
+      const b = el("button","reel-play"); b.type = "button"; b.setAttribute("aria-label", "Play reel: " + r.title);
+      b.append(reelImg(r, true), svg(`<path d="${PLAY_PATH}"/>`));
+      th.classList.remove("playing"); th.replaceChildren(b);
+      b.addEventListener("click", () => {
+        if (stopReel) stopReel();                                  // only one reel plays at a time
+        th.classList.add("playing");
+        th.replaceChildren(makeIframe(`https://www.youtube.com/embed/${r.videoId}?autoplay=1&rel=0&playsinline=1`, r.title));
+        stopReel = idle;
+      });
+    };
+    idle();
+    const meta = el("div","meta"); meta.append(el("h3","",r.title));
+    card.append(th, meta); grid.append(card);
+  });
 }
 
 /* ---------- Single project page (project.html?id=... and the three original style pages) ---------- */
@@ -322,8 +345,8 @@ function build(C, S, D){
   try { localStorage.setItem("settings", JSON.stringify(S || {})); } catch (e) {}
   const arr = x => Array.isArray(x) ? x : [];
   DATA.categories = arr(D.categories).filter(c => c && c.id);
-  DATA.projects = arr(D.projects).filter(p => p && p.id).map(p => ({ categories:[], selectedFrames:[], ...p }));
-  DATA.videos   = arr(D.videos).filter(v => v && v.id).map(v => ({ categories:[], ...v }));
+  DATA.projects = arr(D.projects).filter(p => p && p.id && p.published !== false).map(p => ({ categories:[], selectedFrames:[], ...p }));
+  DATA.reels    = arr(D.reels).filter(r => r && r.id && r.videoId && r.published !== false);
 
   document.title = document.body.dataset.title ? `${document.body.dataset.title} — ${C.brand}` : `${C.brand} — Video Editor`;
   $$("[data-bind]").forEach(e => { const v = C[e.dataset.bind]; if (v != null) e.textContent = v; });
@@ -353,19 +376,12 @@ function build(C, S, D){
   // Projects page: ?category=<id> opens that category directly
   const wanted = new URLSearchParams(location.search).get("category");
   if (wanted && DATA.categories.some(c => c.id === wanted)) view.tab = wanted;
-  renderTabs(); renderGrid();
+  renderTabs(); renderGrid(); renderReels();
   const tabs = $("#tabs");
   tabs && tabs.addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
     view.tab = b.dataset.tab; renderTabs(); renderGrid();
   });
-  const filters = $("#filters");
-  filters && filters.addEventListener("click", e => {
-    const btn = e.target.closest("button"); if (!btn) return;
-    $$(".f", filters).forEach(x => x.classList.toggle("on", x === btn));
-    view.platform = btn.dataset.f; renderGrid();
-  });
-
   // Project page
   const pid = document.body.dataset.project;
   if (pid !== undefined) buildProject(C, pid || new URLSearchParams(location.search).get("id"));
@@ -419,18 +435,22 @@ function setMenu(o){
   document.documentElement.classList.toggle("lock", o);
 }
 burger.addEventListener("click", () => setMenu(!overlay.classList.contains("open")));
-addEventListener("keydown", e => { if (e.key === "Escape"){ closeModal(); closeLightbox(); setMenu(false); } });
+addEventListener("keydown", e => { if (e.key === "Escape"){ closeLightbox(); setMenu(false); } });
 addEventListener("resize", () => { if (innerWidth > 800) setMenu(false); });
 
 /* Page transition: fade out, then go to the next page (delegated so dynamic cards work too) */
 document.addEventListener("click", e => {
-  const a = e.target.closest('a[href*=".html"]');
-  if (!a || e.metaKey || e.ctrlKey || e.shiftKey || a.target) return;
-  const href = a.getAttribute("href");
+  const a = e.target.closest("a[href]");
+  if (!a || e.metaKey || e.ctrlKey || e.shiftKey || a.target || a.hasAttribute("download")) return;
+  const u = new URL(a.href, location.href);
+  if (!/^https?:$/.test(u.protocol) || u.origin !== location.origin) return;            // external / mailto / tel: normal behaviour
+  if (u.pathname === location.pathname && u.search === location.search){               // same page: scroll to top
+    if (u.hash) return;
+    e.preventDefault(); setMenu(false); scrollTo({ top:0, behavior: reduce ? "auto" : "smooth" }); return;
+  }
   e.preventDefault(); setMenu(false);
-  if (href === current){ scrollTo({ top:0, behavior: reduce ? "auto" : "smooth" }); return; }
   document.body.classList.add("leaving");
-  setTimeout(() => location.href = href, reduce ? 0 : 250);
+  setTimeout(() => location.href = u.href, reduce ? 0 : 250);
 });
 addEventListener("pageshow", () => document.body.classList.remove("leaving"));
 

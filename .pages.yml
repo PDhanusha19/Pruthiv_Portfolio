@@ -2,9 +2,9 @@
 # This is the whole "admin" for the portfolio. Keep this file at the ROOT of the GitHub repository.
 #
 # MENU (left side of Pages CMS)
-#   Projects            add / edit / delete projects, mark Featured, categories, video, thumbnail, selected frames
-#   Videos              extra videos (shown on the Projects page, open in a popup)
-#   Categories          add / rename / delete categories
+#   Projects            the cards on Home + Projects page (title, short description, category, thumbnail, featured, published ...)
+#   Short Reels         the vertical YouTube Shorts on the Short Reels page (add, hide, reorder)
+#   Categories          the filter buttons on the Projects page (add / rename / reorder / delete)
 #   Typography & Design font sizes (px), fonts, colors, alignment
 #   Site content        name, intro, bio, photo, email, social links, showreel
 #
@@ -20,103 +20,51 @@ content:
   - name: projects
     label: Projects
     type: collection
-    path: projects
+    path: data/projects
     format: json
     filename: "{primary}.json"
     view:
       primary: title
-      fields: [isFeatured, categories, displayOrder]
+      fields: [category, isFeatured, published, displayOrder]
     fields:
       - name: title
-        label: Project title
+        label: Title
         type: string
         required: true
+        description: "The page address (slug) is made from the title automatically."
       - name: subtitle
-        label: Short line (grey text under the title on cards)
+        label: Short description
         type: string
-        description: "Optional. If empty, the first sentence of the description is used."
-      - name: description
-        label: Description
-        type: text
-        description: "Shown on the project page. Leave a blank line between paragraphs."
-      - name: isFeatured
-        label: Featured project
-        type: boolean
-        default: false
-        description: "ON = this project appears in 'Featured Projects' on the Home page. OFF = it disappears from there (it stays on the Projects page)."
-      - name: categories
-        label: Categories
+        description: "The grey line on the project card. If empty, the first sentence of the long description is used."
+      - name: category
+        label: Category
         type: reference
         options:
           collection: categories
-          multiple: true
           search: name
-        description: "Pick one or more. Add new categories in the 'Categories' menu first."
-      - name: videoUrl
-        label: Video link
-        type: string
-        description: "Paste a YouTube, Instagram reel or TikTok link (any format). It plays on the project page — no upload needed."
-      - name: videoPlatform
-        label: Video platform
-        type: select
-        default: Auto-detect
-        options:
-          values: [Auto-detect, YouTube, Instagram, TikTok]
-        description: "Leave on Auto-detect. The site works it out from the link."
+        description: "Decides which filter button shows this project. Add new categories in the 'Categories' menu first."
       - name: thumbnail
-        label: Thumbnail / cover image
+        label: Thumbnail (16:9)
         type: image
-        description: "Optional for YouTube (its thumbnail is used automatically). Needed for Instagram and TikTok."
-      - name: selectedFrames
-        label: Selected frames
-        type: image
-        list: true
-        description: "Still images shown under the video. Click '+' to add more. Drag to change the order."
+        description: "The card image, 16:9 (for example 1280 x 720). Optional for YouTube, which uses its own thumbnail."
+      - name: isFeatured
+        label: Featured on homepage
+        type: boolean
+        default: false
+        description: "ON = shown in 'Featured Projects' on the Home page. OFF = removed from there (it stays on the Projects page)."
+      - name: published
+        label: Published
+        type: boolean
+        default: true
+        description: "OFF hides the project everywhere on the site without deleting it."
       - name: displayOrder
         label: Display order
         type: number
         description: "Small numbers come first (1, 2, 3...). Leave empty to put it last."
-      - name: createdAt
-        label: Created
-        type: date
-        description: "Optional."
-      - name: updatedAt
-        label: Last updated
-        type: date
-        description: "Optional."
-
-  # ---------------------------------------------------------------- VIDEOS
-  - name: videos
-    label: Videos
-    type: collection
-    path: videos
-    format: json
-    filename: "{primary}.json"
-    view:
-      primary: title
-      fields: [categories, videoPlatform, displayOrder]
-    fields:
-      - name: title
-        label: Video title
-        type: string
-        required: true
-      - name: description
-        label: Description
-        type: string
-        description: "One short line shown on the card."
-      - name: categories
-        label: Categories
-        type: reference
-        options:
-          collection: categories
-          multiple: true
-          search: name
-        description: "Pick one or more."
       - name: videoUrl
-        label: Video link
+        label: Video URL (optional)
         type: string
-        required: true
-        description: "Paste a YouTube, Instagram reel or TikTok link. It opens in a popup on the website."
+        description: "YouTube, Instagram reel or TikTok link. Plays on the project page."
       - name: videoPlatform
         label: Video platform
         type: select
@@ -124,14 +72,24 @@ content:
         options:
           values: [Auto-detect, YouTube, Instagram, TikTok]
         description: "Leave on Auto-detect."
-      - name: thumbnail
-        label: Thumbnail image
+      - name: description
+        label: Long description (project page)
+        type: text
+        description: "Shown on the project page. Leave a blank line between paragraphs."
+      - name: selectedFrames
+        label: Selected frames
         type: image
-        description: "Optional for YouTube. Needed for Instagram and TikTok."
-      - name: displayOrder
-        label: Display order
-        type: number
-        description: "Small numbers come first."
+        list: true
+        description: "Still images shown under the video on the project page. Drag to reorder."
+      - name: linkUrl
+        label: "Advanced: open this page instead"
+        type: string
+        description: "Leave empty for normal projects. The Short Reels card uses /projects/short-reels/."
+      - name: reelsCollage
+        label: "Advanced: use Short Reels collage as the card image"
+        type: boolean
+        default: false
+        description: "Only for the Short Reels card. Shows the first reels as the card image when no thumbnail is set."
       - name: createdAt
         label: Created
         type: date
@@ -139,26 +97,64 @@ content:
         label: Last updated
         type: date
 
+  # ---------------------------------------------------------------- SHORT REELS
+  - name: reels
+    label: Short Reels
+    type: collection
+    path: data/reels
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [published, displayOrder]
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: url
+        label: YouTube Shorts URL
+        type: string
+        required: true
+        description: "Paste the Shorts link (youtube.com/shorts/... or youtu.be/...). The video ID and thumbnail are picked up automatically."
+      - name: thumbnail
+        label: Thumbnail (optional override)
+        type: image
+        description: "Leave empty to use the YouTube thumbnail. Upload a 9:16 image only if you want a different cover."
+      - name: displayOrder
+        label: Display order
+        type: number
+        description: "Small numbers come first. Change the numbers to reorder the reels."
+      - name: published
+        label: Published
+        type: boolean
+        default: true
+        description: "OFF hides the reel from the website without deleting it."
+
   # ---------------------------------------------------------------- CATEGORIES
   - name: categories
     label: Categories
     type: collection
-    path: categories
+    path: data/categories
     format: json
     filename: "{primary}.json"
     view:
       primary: name
-      fields: [createdAt]
+      fields: [displayOrder]
     fields:
       - name: name
         label: Category name
         type: string
         required: true
-        description: "Shown as a button on the Projects page. Renaming it is safe. If you delete a category, its projects and videos stay on the site (just without that category)."
+        description: "Shown as a filter button on the Projects page. Renaming it is safe. If you delete a category, its projects stay on the site under 'All Projects'."
+      - name: displayOrder
+        label: Button order
+        type: number
+        description: "Small numbers come first (after 'All Projects')."
       - name: createdAt
         label: Created
         type: date
-        description: "Categories appear in this order (oldest first)."
+        description: "Used for the order when 'Button order' is empty (oldest first)."
 
   # ---------------------------------------------------------------- TYPOGRAPHY & DESIGN  (settings.json)
   - name: settings
@@ -387,3 +383,7 @@ content:
       - name: whatsapp
         label: WhatsApp number with country code (e.g. +94771234567)
         type: string
+      - name: reelsIntro
+        label: Short Reels page - one-line intro
+        type: string
+        description: "The sentence under the SHORT REELS title."

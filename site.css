@@ -31,7 +31,7 @@ body{font-family:var(--body-font);font-size:var(--fs-body, calc(1rem * var(--bod
   animation:pageIn .5s ease-out}
 body.leaving{opacity:0;transition:opacity .25s ease}
 @keyframes pageIn{from{opacity:0}to{opacity:1}}
-main{flex:1;padding-top:76px}
+main{flex:1;padding-top:var(--nav-h)}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;color:inherit}
@@ -43,7 +43,7 @@ h2{font-size:clamp(var(--sec-min),var(--sec-vw),var(--sec-max))}
 .lead{color:var(--grey);font-size:var(--fs-intro, calc(clamp(1rem,1.8vw,1.2rem) * var(--body-scale)))}
 
 .btn{display:inline-block;background:var(--black);color:var(--white);border:1px solid var(--black);padding:13px 26px;
-  font-weight:500;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;transition:background .25s,color .25s}
+  font-weight:500;font-size:.85rem;letter-spacing:.035em;text-transform:uppercase;transition:background .25s,color .25s}
 .btn:hover{background:var(--white);color:var(--black)}
 
 #progress{position:fixed;top:0;left:0;right:0;height:2px;background:var(--black);z-index:70;transform:scaleX(0);transform-origin:left}
@@ -60,7 +60,7 @@ h2{font-size:clamp(var(--sec-min),var(--sec-vw),var(--sec-max))}
 .logo{display:inline-block;font-family:var(--heading-font);font-weight:var(--heading-weight);font-size:1.25rem;text-transform:uppercase;letter-spacing:var(--heading-tracking);transform-origin:left center;transition:transform .3s}
 #nav.scrolled .logo{transform:scale(.82)}
 .menu{display:flex;gap:40px;list-style:none}
-.menu a{position:relative;display:inline-block;font-size:var(--fs-menu, .82rem);font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);padding:4px 0;transition:color .3s}
+.menu a{position:relative;display:inline-block;font-size:var(--fs-menu, .82rem);font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--grey);padding:4px 0;transition:color .3s}
 .menu a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--black);transform:scaleX(0);transform-origin:right;transition:transform .3s ease}
 .menu a:hover,.menu a.active{color:var(--black)}
 .menu a:hover::after,.menu a.active::after{transform:scaleX(1);transform-origin:left}
@@ -102,19 +102,19 @@ h2{font-size:clamp(var(--sec-min),var(--sec-vw),var(--sec-max))}
 
 /* ---------- Projects grid ---------- */
 .head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
-.filters{display:flex;gap:8px;flex-wrap:wrap}
-.f{border:1px solid var(--line);background:none;color:var(--grey);padding:9px 22px;font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;transition:all .25s}
+.filters{display:flex;gap:14px;flex-wrap:wrap}
+.f{border:1px solid var(--line);background:none;color:var(--grey);padding:9px 22px;font-size:.78rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;transition:all .25s}
 .f:hover{border-color:var(--black);color:var(--black)}
 .f.on{background:var(--black);border-color:var(--black);color:var(--white)}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
 @media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:620px){.grid{grid-template-columns:1fr}}
-.card{display:block;width:100%;text-align:left;background:var(--white);border:1px solid var(--line);border-radius:8px;overflow:hidden;
+.card{display:flex;flex-direction:column;width:100%;text-align:left;background:var(--white);border:1px solid var(--line);border-radius:8px;overflow:hidden;
   box-shadow:0 1px 2px rgba(0,0,0,.05);transition:box-shadow .3s;animation:itemIn .5s ease-out}
 .card:hover{box-shadow:0 10px 25px rgba(0,0,0,.12)}
 .thumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:#e4e4e4}
 .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.thumb::after{content:"";position:absolute;inset:0;background:rgba(10,10,10,.5);opacity:0;transition:opacity .3s}
+.thumb::after{content:"";pointer-events:none;position:absolute;inset:0;background:rgba(10,10,10,.5);opacity:0;transition:opacity .3s}
 .thumb svg{position:absolute;z-index:2;top:50%;left:50%;width:54px;height:54px;fill:#fff;transform:translate(-50%,-50%) scale(.8);opacity:0;transition:all .3s}
 .card:hover .thumb img{transform:scale(1.06)}
 .card:hover .thumb::after{opacity:1}
@@ -247,6 +247,33 @@ html.sec-custom .filters{justify-content:var(--sec-items)}
 
 /* ---------- Projects page tabs + project page category line ---------- */
 #tabs{margin-bottom:28px}
-.cats{color:var(--grey);font-size:.78rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.9rem;text-align:var(--style-align)}
+.cats{color:var(--grey);font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.9rem;text-align:var(--style-align)}
 .cats a{transition:color .25s}
 .cats a:hover{color:var(--black)}
+
+/* ---------- Neat clean-up: one rhythm for heading / filters / grid ---------- */
+:root{--head-gap:clamp(32px,5vh,44px);--nav-h:73px}
+@media(max-width:800px){:root{--nav-h:85px}}
+.card .meta{flex:1}
+.card .thumb{flex:none}
+.sec-tight{padding-top:var(--head-gap)}
+.sec-tight .head{margin-bottom:var(--head-gap)}
+.sec-tight #tabs{margin-bottom:var(--head-gap)}
+
+/* ---------- Short Reels ---------- */
+.back{display:inline-block;color:var(--grey);font-size:.85rem;font-weight:500;margin-bottom:1.4rem;transition:color .25s,transform .25s}
+.back:hover{color:var(--black);transform:translateX(-3px)}
+.reels-grid{margin-top:clamp(28px,5vh,44px)}
+.reel-actions{text-align:center;margin-top:clamp(36px,6vh,56px)}
+.thumb.reel-thumb{aspect-ratio:9/16}
+.reel-play{position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;border:0;background:none;cursor:pointer}
+.thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.thumb.playing::after{display:none}
+/* auto thumbnails of Shorts are 16:9 with the vertical video in the middle: crop to the middle */
+.thumb img.ytshort{position:absolute;top:0;left:50%;height:100%;width:auto;max-width:none;aspect-ratio:16/9;transform:translateX(-50%)}
+.thumb img.ytshort.hq{aspect-ratio:4/3}
+.card:hover .thumb img.ytshort{transform:translateX(-50%) scale(1.06)}
+/* collage on the home "Short Reels" card */
+.cells{position:absolute;inset:0;display:flex;gap:2px;background:var(--white)}
+.cells .cell{position:relative;flex:1;overflow:hidden}
+.cells .cell img:not(.ytshort){position:absolute;inset:0}

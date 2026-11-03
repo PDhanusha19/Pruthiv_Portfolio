@@ -3,9 +3,8 @@
   "subtitle": "Editorial media",
   "description": "A fast-paced SaaS explainer ad for Apptics, announcing their partnership with Whop to fix e-commerce payment processing. The video opens with the pain points merchants face, including payment holds, account bans, no control, and no support, then pivots to the solution: payouts in 1-2 business days and the lowest fees in the industry. Built to hook quickly, communicate value in seconds, and drive viewers to switch at apptics.ai.",
   "isFeatured": true,
-  "categories": [
-    "saas-ui"
-  ],
+  "published": true,
+  "category": "saas-ui",
   "videoUrl": "https://youtu.be/Q7zDzL6lNAE",
   "videoPlatform": "YouTube",
   "thumbnail": "/images/thumbnail.png",
