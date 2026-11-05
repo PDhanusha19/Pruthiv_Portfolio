@@ -94,6 +94,14 @@
       "videoId": "p0BGtRigCmY",
       "thumbnail": "",
       "displayOrder": 1
+    },
+    {
+      "id": "reel-2",
+      "title": "Reel 2 (draft)",
+      "url": "https://www.youtube.com/shorts/HkdhoSZ9QX0",
+      "videoId": "HkdhoSZ9QX0",
+      "thumbnail": "",
+      "displayOrder": 2
     }
   ]
 }
