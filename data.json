@@ -88,14 +88,6 @@
   ],
   "reels": [
     {
-      "id": "reel-1",
-      "title": "Reel 1",
-      "url": "https://youtube.com/shorts/p0BGtRigCmY?feature=share",
-      "videoId": "p0BGtRigCmY",
-      "thumbnail": "",
-      "displayOrder": 1
-    },
-    {
       "id": "reel-2",
       "title": "Reel 2 (draft)",
       "url": "https://www.youtube.com/shorts/HkdhoSZ9QX0",
@@ -110,6 +102,14 @@
       "videoId": "O5dZ_cgi8rY",
       "thumbnail": "",
       "displayOrder": 3
+    },
+    {
+      "id": "reel-1",
+      "title": "Reel 1",
+      "url": "https://youtube.com/shorts/p0BGtRigCmY?feature=share",
+      "videoId": "p0BGtRigCmY",
+      "thumbnail": "",
+      "displayOrder": 4
     },
     {
       "id": "reel-4",
