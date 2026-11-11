@@ -1,13 +1,15 @@
 {
   "title": "Short Reels",
   "subtitle": "YouTube Shorts edited for creators and podcasts",
-  "description": "YouTube Shorts edited for creators and podcasts.",
   "category": "short-reels",
+  "thumbnail": "/images/background (0;00;04;23)-1.jpg",
   "isFeatured": true,
   "published": true,
+  "displayOrder": 1,
+  "videoPlatform": "Auto-detect",
+  "description": "YouTube Shorts edited for creators and podcasts.",
   "linkUrl": "/projects/short-reels/",
   "reelsCollage": true,
-  "displayOrder": 1,
   "createdAt": "2026-11-03",
   "updatedAt": "2026-11-03"
 }
