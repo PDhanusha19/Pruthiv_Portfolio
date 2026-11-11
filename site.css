@@ -333,3 +333,9 @@ html.sec-custom .filters{justify-content:var(--sec-items)}
   .marquee-set[aria-hidden="true"]{display:none}
   .stat-plus{transition:none}
 }
+
+/* ---------- Contact form status message ---------- */
+.form-status{min-height:1.5em;font-size:.9rem;color:var(--grey)}
+.form-status.ok{color:var(--black);font-weight:500}
+.form-status.err a{color:var(--black);text-decoration:underline}
+form .btn:disabled{opacity:.6;cursor:wait}

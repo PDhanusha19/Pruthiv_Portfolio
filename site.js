@@ -386,11 +386,30 @@ function build(C, S, D){
   const pid = document.body.dataset.project;
   if (pid !== undefined) buildProject(C, pid || new URLSearchParams(location.search).get("id"));
 
-  // Contact form -> opens the visitor's email app
+  // Contact form -> really sends the message to the email in content.json (via FormSubmit, no server needed)
   const form = $("#form");
-  form && form.addEventListener("submit", e => {
-    e.preventDefault(); const d = new FormData(form);
-    location.href = `mailto:${C.email}?subject=${encodeURIComponent("Project enquiry from " + d.get("name"))}&body=${encodeURIComponent(d.get("message") + "\n\n— " + d.get("name") + " (" + d.get("email") + ")")}`;
+  form && form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const d = new FormData(form), status = $("#formStatus"), btn = $("button[type=submit]", form);
+    if (d.get("_honey")) return;                                       // a bot filled the hidden field
+    const say = (text, kind) => { status.className = "form-status " + (kind || ""); status.replaceChildren(text); };
+    const mailtoUrl = `mailto:${C.email}?subject=${encodeURIComponent("Project enquiry from " + d.get("name"))}&body=${encodeURIComponent(d.get("message") + "\n\n— " + d.get("name") + " (" + d.get("email") + ")")}`;
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(C.email || "")){ location.href = mailtoUrl; return; }   // no valid address set: old behaviour
+    btn.disabled = true; say("Sending…");
+    try {
+      const r = await fetch("https://formsubmit.co/ajax/" + encodeURIComponent(C.email).replace("%40", "@"), {
+        method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ name: d.get("name"), email: d.get("email"), message: d.get("message"),
+          _subject: "New portfolio message from " + d.get("name"), _replyto: d.get("email"), _template: "table", _captcha: "false" })
+      });
+      const res = await r.json().catch(() => ({}));
+      if (!r.ok || String(res.success) === "false") throw new Error(res.message || ("HTTP " + r.status));
+      form.reset(); say("Thank you! Your message has been sent. I'll reply soon.", "ok");
+    } catch (err) {
+      console.error("Contact form failed:", err);
+      const a = el("a", "", C.email); a.href = mailtoUrl;
+      status.className = "form-status err"; status.replaceChildren("Sorry, that didn't send. Please email me directly at ", a, ".");
+    } finally { btn.disabled = false; }
   });
 }
 

@@ -29,7 +29,10 @@
     <input name="name" placeholder="Your name" required>
     <input name="email" type="email" placeholder="Your email" required>
     <textarea name="message" placeholder="Tell me about your project" required></textarea>
+    <!-- spam trap: real visitors never see or fill this -->
+    <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
     <button class="btn" type="submit">Send message</button>
+    <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
   </form>
 </section>
 </div>
