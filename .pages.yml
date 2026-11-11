@@ -6,7 +6,7 @@
 #   Short Reels         the vertical YouTube Shorts on the Short Reels page (add, hide, reorder)
 #   Categories          the filter buttons on the Projects page (add / rename / reorder / delete)
 #   Typography & Design font sizes (px), fonts, colors, alignment
-#   Site content        name, intro, bio, photo, email, social links, showreel
+#   Site content        name, intro, bio, photo, email, social links
 #
 # Every entry owns its OWN file, so saving one never touches or deletes another (Pages CMS rewrites a file
 # from the fields listed here). After you save, a small GitHub Action rebuilds data.json and the site updates.
@@ -357,9 +357,6 @@ content:
       - name: intro
         label: Intro (under the home page heading)
         type: text
-      - name: showreel
-        label: Showreel link (YouTube)
-        type: string
       - name: bio
         label: About me text (leave a blank line between paragraphs)
         type: text

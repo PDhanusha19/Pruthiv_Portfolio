@@ -386,13 +386,6 @@ function build(C, S, D){
   const pid = document.body.dataset.project;
   if (pid !== undefined) buildProject(C, pid || new URLSearchParams(location.search).get("id"));
 
-  // Showreel (home)
-  const reelFrame = $("#reelFrame");
-  if (reelFrame){
-    const reel = parseVideo({ url: C.showreel });
-    if (reel && reel.platform === "youtube") mountPlayer(reelFrame, reel, "Showreel"); else $("#reelBand").hidden = true;
-  }
-
   // Contact form -> opens the visitor's email app
   const form = $("#form");
   form && form.addEventListener("submit", e => {

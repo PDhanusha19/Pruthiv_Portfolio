@@ -10,7 +10,7 @@ You manage the whole portfolio in **Pages CMS** (app.pagescms.org → this repos
 | **Short Reels** | The vertical YouTube Shorts on the Short Reels page. Paste a Shorts link — the video ID and thumbnail are automatic. |
 | **Categories** | The filter buttons on the Projects page (All Projects + one per category). |
 | **Typography & Design** | Text sizes in pixels (14px / 15px / 16px …), fonts, colors, alignment. |
-| **Site content** | Name, intro, bio, photo, email, social links, showreel, Short Reels intro line. |
+| **Site content** | Name, intro, bio, photo, email, social links, Short Reels intro line. |
 
 ## Everyday tasks
 
