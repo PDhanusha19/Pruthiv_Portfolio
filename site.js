@@ -401,6 +401,32 @@ function build(C, S, D){
   });
 }
 
+/* ---------- Hero: background video + counting number ---------- */
+function startHero(){
+  // 1) Background video: phones get the small file; data-saver / reduced-motion users keep just the poster image
+  const v = $("#heroVideo");
+  if (v){
+    const saveData = navigator.connection && navigator.connection.saveData;
+    if (reduce || saveData){ v.removeAttribute("autoplay"); }
+    else {
+      v.src = matchMedia("(max-width: 700px)").matches ? v.dataset.srcMobile : v.dataset.src;
+      v.muted = true;
+      const p = v.play(); if (p && p.catch) p.catch(() => {});     // autoplay blocked? the poster simply stays
+    }
+  }
+  // 2) "100+" counts up from 0 once, then the "+" fades in
+  const n = $("#statCount"); if (!n) return;
+  const target = parseInt(n.textContent, 10), plus = $(".stat-plus");
+  if (!(target > 0)){ plus && plus.classList.add("show"); return; }
+  if (reduce){ plus && plus.classList.add("show"); return; }
+  const dur = 1800, t0 = performance.now(); n.textContent = "0";
+  (function tick(now){
+    const t = Math.min(1, (now - t0) / dur), eased = 1 - Math.pow(1 - t, 3);
+    n.textContent = Math.round(target * eased);
+    if (t < 1) requestAnimationFrame(tick); else plus && plus.classList.add("show");
+  })(t0);
+}
+
 /* ---------- Load content.json + settings.json + data.json (loading + error states) ---------- */
 const status = $("#status"), content = $("#content");
 async function getJSON(file, optional){
@@ -417,6 +443,7 @@ async function load(){
     const [C, S, D] = await Promise.all([getJSON("content.json"), getJSON("settings.json", true), getJSON("data.json")]);
     build(C, S, D);
     status.hidden = true; content.hidden = false;
+    startHero();
   } catch (err) {
     console.error("Could not build the page:", err);
     const msg = el("p","", location.protocol === "file:"

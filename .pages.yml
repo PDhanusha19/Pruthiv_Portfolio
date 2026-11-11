@@ -387,3 +387,11 @@ content:
         label: Short Reels page - one-line intro
         type: string
         description: "The sentence under the SHORT REELS title."
+      - name: statNumber
+        label: Home banner counter - number
+        type: number
+        description: "The big number on the left of the home banner (it counts up from 0). Example: 100 shows 100+."
+      - name: statLabel
+        label: Home banner counter - label
+        type: string
+        description: "The word under the number, for example Projects."

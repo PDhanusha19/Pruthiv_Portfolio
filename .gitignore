@@ -1,0 +1,2 @@
+# Original 4K source video (33 MB) is too big for Cloudflare Pages (25 MB per file limit). The website uses the compressed hero-background*.mp4 files instead.
+images/background.mp4
