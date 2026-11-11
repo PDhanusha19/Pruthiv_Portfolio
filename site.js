@@ -407,6 +407,20 @@ function startHero(){
       const p = v.play(); if (p && p.catch) p.catch(() => {});     // autoplay blocked? the poster simply stays
     }
   }
+  // 1b) Keep the heading on ONE line whatever font / screen: shrink a little if it is wider than its box
+  const hero = $(".hero-video"), h1 = $(".hero-video h1");
+  if (hero && h1){
+    const fit = () => {
+      hero.style.removeProperty("--hero-h1");
+      let px = parseFloat(getComputedStyle(h1).fontSize);
+      for (let i = 0; i < 24 && h1.scrollWidth > h1.parentElement.clientWidth + 1 && px > 12; i++){
+        px *= 0.96; hero.style.setProperty("--hero-h1", px + "px");
+      }
+    };
+    fit(); addEventListener("resize", fit);
+    if (document.fonts){ document.fonts.ready.then(fit); document.fonts.addEventListener("loadingdone", fit); }
+    window.fitHeroHeading = fit;      // called again when Design Settings change the font
+  }
   // 2) "100+" counts up from 0 once, then the "+" fades in
   const n = $("#statCount"); if (!n) return;
   const target = parseInt(n.textContent, 10), plus = $(".stat-plus");
@@ -414,7 +428,7 @@ function startHero(){
   if (reduce){ plus && plus.classList.add("show"); return; }
   const dur = 1800, t0 = performance.now(); n.textContent = "0";
   (function tick(now){
-    const t = Math.min(1, (now - t0) / dur), eased = 1 - Math.pow(1 - t, 3);
+    const t = Math.max(0, Math.min(1, (now - t0) / dur)), eased = 1 - Math.pow(1 - t, 3);   // clamp: the first frame can be stamped slightly before t0
     n.textContent = Math.round(target * eased);
     if (t < 1) requestAnimationFrame(tick); else plus && plus.classList.add("show");
   })(t0);

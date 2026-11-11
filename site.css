@@ -280,29 +280,35 @@ html.sec-custom .filters{justify-content:var(--sec-items)}
 
 /* ==========================================================
    HERO WITH BACKGROUND VIDEO  (index.html)
+   Order: 1) heading on ONE line (biggest text)  2) short description  3) row: counter left, icon marquee right
    ========================================================== */
 .hero.hero-video{position:relative;overflow:hidden;background:#0a0a0a;display:flex;align-items:center;
   min-height:clamp(440px,70svh,700px);padding:clamp(40px,8vh,88px) 0}
 .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
 .hero-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:1}      /* dark layer: 0.5 = 50% (try .4 - .55) */
-.hero .wrap.hero-grid{position:relative;z-index:2;width:100%;display:grid;text-align:initial;
-  grid-template-columns:clamp(160px,16vw,230px) minmax(0,1fr) clamp(220px,24vw,340px);align-items:center;gap:clamp(24px,4vw,56px)}
+.hero .wrap.hero-grid{position:relative;z-index:2;width:100%;display:flex;flex-direction:column;align-items:stretch;text-align:initial;
+  gap:clamp(36px,7vh,64px)}
 
-/* center: the existing heading + text, now white on the video (alignment still follows Design Settings) */
+/* heading + description: white on the video (alignment still follows Design Settings) */
 .hero-main{display:flex;flex-direction:column;align-items:var(--hero-items);text-align:var(--hero-align);min-width:0}
-.hero-video h1{color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.35)}
+.hero-video{--hero-h1:min(5.2rem,calc((100vw - 2 * var(--pad)) / 14.4))}       /* heading size: as big as fits on ONE line (site.js shrinks it further if a wider font is chosen) */
+.hero-video h1{color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.35);
+  font-size:var(--hero-h1);white-space:nowrap;margin-bottom:clamp(14px,2.4vh,22px)}   /* one line, the biggest text in the hero */
 .hero-video .lead{color:rgba(255,255,255,.9);text-shadow:0 1px 12px rgba(0,0,0,.35)}
 
-/* left: counter */
-.hero-stat{color:#fff}
+/* bottom row: counter on the left, icons on the right */
+.hero-bottom{display:flex;align-items:center;justify-content:space-between;gap:clamp(24px,4vw,56px);min-width:0}
+
+/* left: counter (smaller than the heading) */
+.hero-stat{color:#fff;flex:none;min-width:clamp(140px,14vw,200px)}
 .stat-num{font-family:var(--heading-font);font-weight:var(--heading-weight);letter-spacing:var(--heading-tracking);line-height:1;
-  font-size:clamp(3rem,5.6vw,5rem);font-variant-numeric:tabular-nums;white-space:nowrap;color:#fff}
+  font-size:min(clamp(2.4rem,4vw,3.4rem),calc(var(--hero-h1) * .95));font-variant-numeric:tabular-nums;white-space:nowrap;color:#fff}
 .stat-plus{opacity:0;transition:opacity .45s ease}
 .stat-plus.show{opacity:1}
-.stat-label{margin-top:.6rem;font-size:.9rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.82)}
+.stat-label{margin-top:.5rem;font-size:.9rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.82)}
 
 /* right: infinite icon marquee (CSS translateX, pauses on hover, soft fade edges) */
-.hero-marquee{--icon:56px;--space:28px;min-width:0;max-width:420px;width:100%;justify-self:end;overflow:hidden;
+.hero-marquee{--icon:56px;--space:28px;min-width:0;max-width:420px;width:100%;overflow:hidden;
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16%,#000 84%,transparent 100%);
   mask-image:linear-gradient(90deg,transparent 0,#000 16%,#000 84%,transparent 100%)}
 .marquee-track{display:flex;width:max-content;animation:marquee 26s linear infinite;will-change:transform}
@@ -312,13 +318,13 @@ html.sec-custom .filters{justify-content:var(--sec-items)}
 .marquee-set img{display:block;width:var(--icon);height:var(--icon);border-radius:14px}
 @keyframes marquee{to{transform:translateX(-50%)}}
 
-/* tablet + mobile: heading first, then the counter, then the icons */
+/* tablet + mobile: heading, description, then the counter, then the icons (stacked) */
 @media(max-width:960px){
   .hero.hero-video{min-height:0;padding:48px 0 40px}
-  .hero .wrap.hero-grid{grid-template-columns:1fr;justify-items:center;gap:32px}
-  .hero-main{order:1;width:100%;align-items:var(--hero-items-m);text-align:var(--hero-align-m)}
-  .hero-stat{order:2;text-align:center}
-  .hero-marquee{order:3;justify-self:center}
+  .hero .wrap.hero-grid{gap:32px}
+  .hero-main{width:100%;align-items:var(--hero-items-m);text-align:var(--hero-align-m)}
+  .hero-bottom{flex-direction:column;justify-content:center;gap:28px}
+  .hero-stat{text-align:center;min-width:0}
   .hero-marquee{--icon:48px;--space:24px}
 }
 @media(prefers-reduced-motion:reduce){

@@ -26,35 +26,37 @@
          aria-hidden="true" tabindex="-1" disablepictureinpicture></video>
   <div class="hero-overlay"></div>
   <div class="wrap hero-grid">
-    <!-- LEFT: counter. Number and label come from content.json (statNumber / statLabel) -->
-    <div class="hero-stat">
-      <div class="stat-num"><span id="statCount" data-bind="statNumber">100</span><span class="stat-plus">+</span></div>
-      <div class="stat-label" data-bind="statLabel">Projects</div>
-    </div>
-    <!-- CENTER: heading + intro (unchanged, from content.json) -->
+    <!-- TOP: heading (one line) + short description (unchanged, from content.json) -->
     <div class="hero-main">
       <h1 data-bind="heroHeading"></h1>
       <p class="lead" data-bind="intro"></p>
     </div>
-    <!-- RIGHT: software icon marquee. Icon files: images/software/*.svg. The second list is a copy so the loop is seamless. -->
-    <div class="hero-marquee marquee" aria-label="Software I use: Premiere Pro, After Effects, Photoshop, CapCut, Figma, Canva">
-      <div class="marquee-track">
-        <ul class="marquee-set">
-          <li><img src="images/software/premiere-pro.svg" alt="Adobe Premiere Pro" width="56" height="56" loading="lazy" decoding="async"></li>
-          <li><img src="images/software/after-effects.svg" alt="Adobe After Effects" width="56" height="56" loading="lazy" decoding="async"></li>
-          <li><img src="images/software/photoshop.svg" alt="Adobe Photoshop" width="56" height="56" loading="lazy" decoding="async"></li>
-          <li><img src="images/software/capcut.svg" alt="CapCut" width="56" height="56" loading="lazy" decoding="async"></li>
-          <li><img src="images/software/figma.svg" alt="Figma" width="56" height="56" loading="lazy" decoding="async"></li>
-          <li><img src="images/software/canva.svg" alt="Canva" width="56" height="56" loading="lazy" decoding="async"></li>
-        </ul>
-        <ul class="marquee-set" aria-hidden="true">
-          <li><img src="images/software/premiere-pro.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
-          <li><img src="images/software/after-effects.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
-          <li><img src="images/software/photoshop.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
-          <li><img src="images/software/capcut.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
-          <li><img src="images/software/figma.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
-          <li><img src="images/software/canva.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
-        </ul>
+    <div class="hero-bottom">
+      <!-- LEFT: project counter. Number and label come from content.json (statNumber / statLabel) -->
+      <div class="hero-stat">
+        <div class="stat-num"><span id="statCount" data-bind="statNumber">100</span><span class="stat-plus">+</span></div>
+        <div class="stat-label" data-bind="statLabel">Projects</div>
+      </div>
+      <!-- RIGHT: software icon marquee. Icon files: images/software/*.svg. The second list is a copy so the loop is seamless. -->
+      <div class="hero-marquee marquee" aria-label="Software I use: Premiere Pro, After Effects, Photoshop, CapCut, Figma, Canva">
+        <div class="marquee-track">
+          <ul class="marquee-set">
+            <li><img src="images/software/premiere-pro.svg" alt="Adobe Premiere Pro" width="56" height="56" loading="lazy" decoding="async"></li>
+            <li><img src="images/software/after-effects.svg" alt="Adobe After Effects" width="56" height="56" loading="lazy" decoding="async"></li>
+            <li><img src="images/software/photoshop.svg" alt="Adobe Photoshop" width="56" height="56" loading="lazy" decoding="async"></li>
+            <li><img src="images/software/capcut.svg" alt="CapCut" width="56" height="56" loading="lazy" decoding="async"></li>
+            <li><img src="images/software/figma.svg" alt="Figma" width="56" height="56" loading="lazy" decoding="async"></li>
+            <li><img src="images/software/canva.svg" alt="Canva" width="56" height="56" loading="lazy" decoding="async"></li>
+          </ul>
+          <ul class="marquee-set" aria-hidden="true">
+            <li><img src="images/software/premiere-pro.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
+            <li><img src="images/software/after-effects.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
+            <li><img src="images/software/photoshop.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
+            <li><img src="images/software/capcut.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
+            <li><img src="images/software/figma.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
+            <li><img src="images/software/canva.svg" alt="" width="56" height="56" loading="lazy" decoding="async"></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
