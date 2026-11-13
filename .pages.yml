@@ -392,3 +392,38 @@ content:
         label: Home banner counter - label
         type: string
         description: "The word under the number, for example Projects."
+
+  # ---------------------------------------------------------------- CLIENT REVIEWS  (reviews.json)
+  - name: reviews
+    label: Client Reviews
+    type: file
+    path: reviews.json
+    format: json
+    fields:
+      - name: reviews
+        label: Reviews
+        type: object
+        list: true
+        description: "The cards on the About page. Click + to add a review. Keep the client's words exactly as they wrote them."
+        fields:
+          - name: name
+            label: Name / username
+            type: string
+            required: true
+          - name: country
+            label: Country
+            type: string
+          - name: rating
+            label: Rating (5, 4.7 ...)
+            type: number
+            required: true
+            description: "A number from 0 to 5. 4.7 shows as 4.7 stars."
+          - name: comment
+            label: Comment
+            type: text
+            required: true
+            description: "Paste the review exactly as written, emojis included."
+          - name: flag
+            label: Flag emoji (optional)
+            type: string
+            description: "Optional, for example the country's flag emoji. Shown before the country name."

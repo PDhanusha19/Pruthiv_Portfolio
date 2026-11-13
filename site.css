@@ -339,3 +339,61 @@ html.sec-custom .filters{justify-content:var(--sec-items)}
 .form-status.ok{color:var(--black);font-weight:500}
 .form-status.err a{color:var(--black);text-decoration:underline}
 form .btn:disabled{opacity:.6;cursor:wait}
+
+/* ==========================================================
+   CLIENT REVIEWS  (about.html)
+   ========================================================== */
+.reviews{--rv-w:340px;--rv-h:282px;--rv-gap:20px;background:var(--soft);padding:clamp(48px,8vh,88px) 0;margin-top:clamp(24px,5vh,56px);overflow:hidden}
+.rv-summary{text-align:center;color:var(--grey);margin:-14px 0 clamp(24px,4vh,36px);font-size:1rem}
+.rv-summary b{color:var(--black);font-weight:700}
+.rv-rows{display:flex;flex-direction:column;gap:var(--rv-gap)}
+.rv-row{overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%)}
+.rv-track{display:flex;width:max-content;animation:rvScroll var(--dur,90s) linear infinite;will-change:transform}
+.rv-row:hover .rv-track{animation-play-state:paused}
+.rv-set{display:flex;flex:none}
+@keyframes rvScroll{to{transform:translateX(-50%)}}      /* one set = exactly half the track, so the loop never jumps */
+
+.review-card{flex:none;width:var(--rv-w);height:var(--rv-h);margin-right:var(--rv-gap);padding:22px;background:var(--white);
+  border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.07);display:flex;flex-direction:column;
+  text-align:left;cursor:pointer;transition:box-shadow .3s,transform .3s}
+.review-card:hover{box-shadow:0 14px 32px rgba(0,0,0,.12);transform:translateY(-2px)}
+.rc-top{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.stars{--p:100%;position:relative;display:inline-block;font-size:1.05rem;line-height:1;letter-spacing:2px;color:#d4d4d4;white-space:nowrap}
+.stars::before{content:"★★★★★"}
+.stars::after{content:"★★★★★";position:absolute;left:0;top:0;width:var(--p);overflow:hidden;color:var(--black)}   /* partial fill: 4.7 = 94% */
+.rc-num{font-size:.85rem;font-weight:700;color:var(--black)}
+.rc-text{flex:1;min-height:0;font-size:.95rem;line-height:1.55;color:var(--grey);overflow:hidden;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;line-clamp:5;overflow-wrap:anywhere}
+.rc-more{height:22px;line-height:22px;font-size:.8rem;font-weight:600;letter-spacing:.03em;color:var(--black);text-decoration:underline;visibility:hidden}
+.review-card.has-more .rc-more{visibility:visible}
+.rc-foot{display:flex;flex-direction:column;gap:2px;padding-top:12px;border-top:1px solid var(--line);font-size:.85rem}
+.rc-name{font-weight:700;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-country{color:var(--grey);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* touch + reduced motion: swipe / scroll by hand */
+.reviews.manual .rv-row{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.reviews.manual .rv-row::-webkit-scrollbar{display:none}
+.reviews.manual .rv-track{animation:none;will-change:auto}
+.reviews.still .rv-set{padding-left:max(var(--pad),calc((100vw - 1344px) / 2 + var(--pad)))}
+
+/* full review dialog */
+#reviewModal{position:fixed;inset:0;z-index:95;background:rgba(10,10,10,.8);display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+#reviewModal.open{opacity:1;visibility:visible;transition:opacity .3s}
+.rm-box{position:relative;width:min(560px,100%);max-height:86vh;overflow:auto;background:var(--white);border-radius:12px;padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.rm-close{position:absolute;top:8px;right:12px;width:40px;height:40px;border:0;background:none;font-size:2rem;line-height:1;color:var(--black)}
+.rm-top{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.rm-text{white-space:pre-line;color:var(--black);font-size:1rem;line-height:1.65;overflow-wrap:anywhere}
+.rm-foot{display:flex;flex-direction:column;gap:2px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);font-size:.9rem}
+
+@media(max-width:620px){
+  .reviews{--rv-w:272px;--rv-h:268px;--rv-gap:14px}
+  .review-card{padding:18px}
+  .rc-text{font-size:.9rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .rv-track{animation:none}
+  .review-card,#reviewModal{transition:none}
+}

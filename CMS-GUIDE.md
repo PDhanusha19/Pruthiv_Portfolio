@@ -11,6 +11,7 @@ You manage the whole portfolio in **Pages CMS** (app.pagescms.org → this repos
 | **Categories** | The filter buttons on the Projects page (All Projects + one per category). |
 | **Typography & Design** | Text sizes in pixels (14px / 15px / 16px …), fonts, colors, alignment. |
 | **Site content** | Name, intro, bio, photo, email, social links, Short Reels intro line. |
+| **Client Reviews** | The review cards on the About page (name, country, rating, comment). Click **+** to add one; the About page average and count update by themselves. |
 
 ## Everyday tasks
 

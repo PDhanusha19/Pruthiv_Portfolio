@@ -453,6 +453,125 @@ function startHero(){
   })(t0);
 }
 
+/* ---------- Client Reviews (About page) ----------
+   Data: reviews.json  ->  { "reviews": [ { "name", "country", "rating", "comment", "flag" (optional) } ] }
+   Add / edit reviews in Pages CMS -> "Client Reviews". Nothing here needs to change.
+   - mouse devices: CSS marquee (translateX), pauses on hover; row 1 flows left, row 2 flows right
+   - touch devices: the rows scroll by themselves but can be swiped; reduced-motion: manual scrolling only */
+async function initReviews(){
+  const sec = $("#reviews"); if (!sec) return;
+  let list = [];
+  try {
+    const r = await fetch("reviews.json", { cache: "no-store" });
+    if (r.ok){ const j = await r.json(); list = Array.isArray(j) ? j : (j.reviews || []); }
+  } catch (e) { console.warn("reviews.json could not be loaded:", e); }
+  list = list.filter(x => x && String(x.comment || "").trim());
+  if (!list.length) return;                                            // no reviews yet: the section stays hidden
+
+  sec.hidden = false;                                                  // visible first, so widths can be measured
+  const rating = x => Math.max(0, Math.min(5, Number(x.rating) || 0));
+  const avg = list.reduce((s, x) => s + rating(x), 0) / list.length;
+  $("#rvSummary").replaceChildren(el("b","", "★ " + avg.toFixed(2)), " average rating  ·  ", el("b","", String(list.length)), list.length === 1 ? " review" : " reviews");
+
+  const manual = reduce || matchMedia("(hover: none), (pointer: coarse)").matches;   // swipe / manual mode
+  const rowsBox = $("#rvRows"); rowsBox.replaceChildren();
+  sec.classList.toggle("manual", manual); sec.classList.toggle("still", reduce);
+
+  const stars = x => {                                                  // 4.7 shows as 4.7 stars (partial fill), not rounded
+    const s = el("span","stars"); s.style.setProperty("--p", (rating(x) / 5 * 100) + "%");
+    s.setAttribute("role","img"); s.setAttribute("aria-label", `Rated ${rating(x)} out of 5`); return s;
+  };
+  const card = (x, i, copy) => {
+    const c = el("article","review-card"); c.dataset.i = i;
+    if (copy){ c.setAttribute("aria-hidden","true"); c.tabIndex = -1; } else { c.tabIndex = 0; c.setAttribute("aria-label", "Review by " + (x.name || "client") + ". Press Enter to read it in full."); }
+    const top = el("div","rc-top"); top.append(stars(x), el("span","rc-num", String(rating(x))));
+    const more = el("span","rc-more","Read more");
+    const foot = el("div","rc-foot"), who = el("span","rc-name", x.name || "");
+    const place = [x.flag, x.country].filter(Boolean).join(" ");
+    foot.append(who, el("span","rc-country", place));
+    c.append(top, el("p","rc-text", x.comment), more, foot);
+    return c;
+  };
+
+  // two rows: even reviews on the first row, odd on the second (so ratings and lengths mix evenly)
+  const rows = [[], []];
+  list.forEach((x, i) => rows[i % 2].push(i));
+  if (!rows[1].length) rows.pop();
+  const rowEls = rows.map((idxs, r) => {
+    const row = el("div","rv-row"), track = el("div","rv-track"), set = el("div","rv-set");
+    idxs.forEach(i => set.append(card(list[i], i, false)));
+    track.append(set); row.append(track); rowsBox.append(row);
+    if (!reduce){                                                       // repeat until one set is wider than the screen, then copy the set: seamless loop
+      let guard = 0;
+      while (set.scrollWidth < rowsBox.clientWidth + 40 && guard++ < 12) idxs.forEach(i => set.append(card(list[i], i, true)));
+      const copy = set.cloneNode(true); copy.setAttribute("aria-hidden","true");
+      $$(".review-card", copy).forEach(c => c.tabIndex = -1);
+      track.append(copy);
+      row.dataset.setw = set.scrollWidth;
+      track.style.setProperty("--dur", Math.max(30, set.scrollWidth / 46) + "s");   // about 46px per second = calm
+      if (r === 1) track.style.animationDirection = "reverse";         // second row flows the other way
+    }
+    return row;
+  });
+
+  // "Read more" only where the comment is really cut off
+  $$(".review-card", rowsBox).forEach(c => { const t = $(".rc-text", c); c.classList.toggle("has-more", t.scrollHeight > t.clientHeight + 1); });
+
+  // full comment in a dialog (click a card, press Enter, or "Read more")
+  let modal = $("#reviewModal");
+  if (!modal){
+    document.body.insertAdjacentHTML("beforeend", `<div id="reviewModal" role="dialog" aria-modal="true" aria-label="Client review"><div class="rm-box"><button class="rm-close" aria-label="Close review">&times;</button><div class="rm-top"></div><p class="rm-text"></p><div class="rm-foot"></div></div></div>`);
+    modal = $("#reviewModal");
+    modal.addEventListener("click", e => { if (e.target === modal || e.target.closest(".rm-close")) closeReview(); });
+    addEventListener("keydown", e => { if (e.key === "Escape") closeReview(); });
+  }
+  const openReview = (c) => {
+    const x = list[+c.dataset.i]; if (!x) return;
+    lastFocus = c;
+    $(".rm-top", modal).replaceChildren(stars(x), el("span","rc-num", String(rating(x))));
+    $(".rm-text", modal).textContent = x.comment;
+    $(".rm-foot", modal).replaceChildren(el("span","rc-name", x.name || ""), el("span","rc-country", [x.flag, x.country].filter(Boolean).join(" ")));
+    modal.classList.add("open"); document.documentElement.classList.add("lock"); $(".rm-close", modal).focus();
+  };
+  function closeReview(){
+    if (!modal.classList.contains("open")) return;
+    modal.classList.remove("open"); document.documentElement.classList.remove("lock"); lastFocus && lastFocus.focus && lastFocus.focus();
+  }
+  rowsBox.onclick = e => { const c = e.target.closest(".review-card"); if (c) openReview(c); };
+  rowsBox.onkeydown = e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("review-card")){ e.preventDefault(); openReview(e.target); } };
+
+  // touch devices: slow automatic scrolling that stops while you touch / swipe, and carries on afterwards
+  if (manual && !reduce){
+    const speed = 38, state = rowEls.map((row, r) => {
+      const w = +row.dataset.setw, pos = r === 1 ? w - 1 : 1; row.scrollLeft = pos;
+      return { row, w, dir: r === 1 ? -1 : 1, pos, set: row.scrollLeft };
+    });
+    let pausedUntil = 0, visible = true, last = performance.now();
+    const hold = (ms = 2500) => { pausedUntil = performance.now() + ms; };
+    ["pointerdown","touchstart","wheel"].forEach(ev => rowsBox.addEventListener(ev, () => hold(1e9), { passive:true }));
+    ["pointerup","touchend","pointercancel"].forEach(ev => rowsBox.addEventListener(ev, () => hold(2500), { passive:true }));
+    state.forEach(s => s.row.addEventListener("scroll", () => {          // the user is swiping: keep the loop endless
+      const cur = s.row.scrollLeft;
+      if (Math.abs(cur - s.set) <= 2) return;                            // that was our own automatic scroll
+      hold(2500); s.pos = cur;
+      if (cur >= s.w) s.pos = cur - s.w; else if (cur <= 0) s.pos = cur + s.w; else return;
+      s.row.scrollLeft = s.pos; s.set = s.row.scrollLeft;
+    }, { passive:true }));
+    new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { threshold: 0 }).observe(sec);
+    (function frame(now){
+      const dt = Math.max(0, Math.min(64, now - last)) / 1000; last = now;      // never negative (the first frame can be stamped slightly early)
+      if (visible && now > pausedUntil){
+        state.forEach(s => {
+          s.pos += s.dir * speed * dt;
+          if (s.pos >= s.w) s.pos -= s.w; else if (s.pos <= 0) s.pos += s.w;
+          s.row.scrollLeft = s.pos; s.set = s.row.scrollLeft;
+        });
+      }
+      requestAnimationFrame(frame);
+    })(last);
+  }
+}
+
 /* ---------- Load content.json + settings.json + data.json (loading + error states) ---------- */
 const status = $("#status"), content = $("#content");
 async function getJSON(file, optional){
@@ -470,6 +589,7 @@ async function load(){
     build(C, S, D);
     status.hidden = true; content.hidden = false;
     startHero();
+    initReviews();
   } catch (err) {
     console.error("Could not build the page:", err);
     const msg = el("p","", location.protocol === "file:"
